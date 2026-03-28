@@ -1,0 +1,47 @@
+body {
+    background: #f5f7fb;
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.card {
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+}
+
+.btn {
+    border-radius: 10px;
+}
+
+.table thead th {
+    white-space: nowrap;
+}
+
+.form-label {
+    font-weight: 600;
+}
+
+.menu-card {
+    background: linear-gradient(135deg, #f5fd0d, #bbec35);
+    color: #000;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px !important;
+    padding: 4px 8px;
+    border: 1px solid #ced4da !important;
+    border-radius: .375rem !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    line-height: 28px !important;
+}
+
+.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 36px !important;
+}
