@@ -56,6 +56,10 @@ if (!$dataLama) {
     die('Data lama tidak ditemukan atau sudah tidak aktif.');
 }
 
+$root_id_baru = !empty($dataLama['root_id'])
+    ? (int)$dataLama['root_id']
+    : (int)$id_lama;
+
 /*
 |--------------------------------------------------------------------------
 | Validasi jenis bantuan harus sesuai dengan sumber bantuan yang dipilih
@@ -111,6 +115,7 @@ try {
             tanggal_submit,
             is_active,
             copied_from_id,
+            root_id,
             keterangan_kendala,
             keterangan_umum,
             created_at,
@@ -124,6 +129,7 @@ try {
             :tanggal_submit,
             1,
             :copied_from_id,
+            :root_id,
             :keterangan_kendala,
             :keterangan_umum,
             NOW(),
@@ -137,6 +143,7 @@ try {
         'status_verifikasi'  => $status_verifikasi,
         'tanggal_submit'     => $tanggal_submit,
         'copied_from_id'     => $id_lama,
+        'root_id'            => $root_id_baru,
         'keterangan_kendala' => $keterangan_kendala,
         'keterangan_umum'    => $keterangan_umum,
     ]);

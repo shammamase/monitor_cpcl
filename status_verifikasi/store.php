@@ -94,6 +94,13 @@ try {
 
     $id_status_verif = $pdo->lastInsertId();
 
+    $stmtSetRoot = $pdo->prepare("
+        UPDATE status_verifikasi
+        SET root_id = ?
+        WHERE id_status_verif = ?
+    ");
+    $stmtSetRoot->execute([$id_status_verif, $id_status_verif]);
+
     /*
     |--------------------------------------------------------------------------
     | Simpan multi jenis bantuan ke tabel relasi

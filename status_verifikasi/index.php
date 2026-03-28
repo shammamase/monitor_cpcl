@@ -109,6 +109,7 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.root_id,
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
@@ -131,6 +132,7 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.root_id,
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
@@ -151,6 +153,34 @@ $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $data = $stmt->fetchAll();
+
+$rootIds = [];
+
+foreach ($data as $row) {
+    if (!empty($row['root_id'])) {
+        $rootIds[] = (int)$row['root_id'];
+    }
+}
+
+$rootIds = array_values(array_unique($rootIds));
+$finalizedRoots = [];
+
+if (!empty($rootIds)) {
+    $placeholders = implode(',', array_fill(0, count($rootIds), '?'));
+
+    $stmtFinalized = $pdo->prepare("
+        SELECT DISTINCT root_id
+        FROM status_verifikasi
+        WHERE root_id IN ($placeholders)
+          AND status_verifikasi = 1
+    ");
+    $stmtFinalized->execute($rootIds);
+    $rowsFinalized = $stmtFinalized->fetchAll(PDO::FETCH_COLUMN);
+
+    foreach ($rowsFinalized as $rid) {
+        $finalizedRoots[(int)$rid] = true;
+    }
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -337,7 +367,14 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                             ?>
                             <tr>
                                 <td><?= $offset + $i + 1 ?></td>
-                                <td><?= e($row['nama_poktan']) ?></td>
+                                <td>
+                                    <a href="<?= base_url('?' . http_build_query([
+                                        'page' => 'status_verifikasi',
+                                        'keyword_sv' => $row['nama_poktan']
+                                    ])) ?>" class="text-decoration-none fw-semibold">
+                                        <?= e($row['nama_poktan']) ?>
+                                    </a>
+                                </td>
                                 <td class="sv-meta">
                                     <strong><?= e($row['provinsi']) ?></strong>
                                     <small><?= e($row['kabupaten']) ?></small>
@@ -380,7 +417,14 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                                 </td>
                                 <td>
                                     <div class="d-flex flex-wrap gap-1">
-                                        <a href="<?= base_url('status_verifikasi/edit.php?id=' . $row['id_status_verif']) ?>" class="btn btn-sm btn-warning">Update</a>
+                                        <?php
+                                            $rootId = (int)($row['root_id'] ?? 0);
+                                            $hideUpdate = $rootId > 0 && isset($finalizedRoots[$rootId]);
+                                        ?>
+
+                                        <?php if (!$hideUpdate): ?>
+                                            <a href="<?= base_url('status_verifikasi/edit.php?id=' . $row['id_status_verif']) ?>" class="btn btn-sm btn-warning">Update</a>
+                                        <?php endif; ?>
                                         <a href="<?= base_url('status_verifikasi/delete.php?id=' . $row['id_status_verif']) ?>"
                                            class="btn btn-sm btn-danger"
                                            onclick="return confirm('Yakin ingin menghapus data ini?')">Hapus</a>

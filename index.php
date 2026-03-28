@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/helpers/functions.php';
 
-$page = $_GET['page'] ?? 'poktan';
+$page = $_GET['page'] ?? 'status_verifikasi';
 ?>
 <!doctype html>
 <html lang="id">
