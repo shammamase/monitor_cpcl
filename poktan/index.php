@@ -77,6 +77,7 @@ if ($page_number > $totalPage) {
 $sql = "SELECT 
             p.id_poktan,
             p.nama_poktan,
+            p.nama_ketua_poktan,
             p.alamat,
             pr.name AS provinsi,
             kb.name AS kabupaten,
@@ -187,6 +188,7 @@ function buildPoktanPageUrl($page, $keyword, $provinsi_id, $kabupaten_id)
                     <tr>
                         <th width="60">No</th>
                         <th>Nama Poktan</th>
+                        <th>Nama Ketua Poktan</th>
                         <th>Alamat</th>
                         <th>Provinsi</th>
                         <th>Kabupaten</th>
@@ -200,6 +202,7 @@ function buildPoktanPageUrl($page, $keyword, $provinsi_id, $kabupaten_id)
                             <tr>
                                 <td><?= $offset + $i + 1 ?></td>
                                 <td><?= e($row['nama_poktan']) ?></td>
+                                <td><?= e($row['nama_ketua_poktan']) ?></td>
                                 <td><?= e($row['alamat']) ?></td>
                                 <td><?= e($row['provinsi']) ?></td>
                                 <td><?= e($row['kabupaten']) ?></td>
@@ -214,7 +217,7 @@ function buildPoktanPageUrl($page, $keyword, $provinsi_id, $kabupaten_id)
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" class="text-center text-muted">Belum ada data.</td>
+                            <td colspan="8" class="text-center text-muted">Belum ada data.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

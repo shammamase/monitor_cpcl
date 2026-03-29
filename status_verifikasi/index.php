@@ -351,7 +351,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                         <th>Status</th>
                         <th>Jenis Bantuan</th>
                         <th>Keterangan Kendala</th>
-                        <th>Keterangan Umum</th>
+                        <!--<th>Keterangan Umum</th>-->
                         <th>Waktu Input</th>
                         <th width="180">Aksi</th>
                     </tr>
@@ -407,7 +407,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                                     <?php endif; ?>
                                 </td>
                                 <td><?= !empty($row['keterangan_kendala']) ? nl2br(e($row['keterangan_kendala'])) : '<span class="text-muted">-</span>' ?></td>
-                                <td><?= !empty($row['keterangan_umum']) ? nl2br(e($row['keterangan_umum'])) : '<span class="text-muted">-</span>' ?></td>
+                                <!--<td><?= !empty($row['keterangan_umum']) ? nl2br(e($row['keterangan_umum'])) : '<span class="text-muted">-</span>' ?></td>-->
                                 <td class="waktu-input">
                                     <?php if (!empty($row['created_at'])): ?>
                                         <?= e(date('d-m-Y H:i', strtotime($row['created_at']))) ?>
@@ -434,7 +434,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="10" class="text-center text-muted">Belum ada data.</td>
+                            <td colspan="9" class="text-center text-muted">Belum ada data.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

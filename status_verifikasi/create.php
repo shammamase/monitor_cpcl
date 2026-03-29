@@ -19,7 +19,10 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= base_url() ?>">Monitoring CPCL BRMP</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= base_url() ?>">
+            <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" height="36">
+            <span>Monitoring CPCL BRMP</span>
+        </a>
     </div>
 </nav>
 <div class="container py-4">
@@ -78,12 +81,12 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
 
                 <div class="form-check form-switch mb-3">
                     <input class="form-check-input" type="checkbox" id="status_verifikasi" name="status_verifikasi" value="1">
-                    <label class="form-check-label" for="status_verifikasi">Status Verifikasi Sudah</label>
+                    <label class="form-check-label" for="status_verifikasi">Status Verifikasi Sudah Memenuhi Syarat</label>
                     <div class="form-text">Jika tidak dicentang, status otomatis tersimpan sebagai <b>Belum</b>.</div>
                 </div>
 
                 <div class="mb-3 d-none" id="tanggal_submit_wrapper">
-                    <label class="form-label">Tanggal Submit</label>
+                    <label class="form-label">Tanggal Submit Ke Eselon 1</label>
                     <input type="date" name="tanggal_submit" id="tanggal_submit" class="form-control">
                 </div>
 
@@ -91,12 +94,14 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
                     <label class="form-label">Keterangan Kendala</label>
                     <textarea name="keterangan_kendala" class="form-control" rows="3"></textarea>
                 </div>
-
+                <?php 
+                /*
                 <div class="mb-3">
                     <label class="form-label">Keterangan Umum</label>
                     <textarea name="keterangan_umum" class="form-control" rows="3"></textarea>
                 </div>
-
+                */
+                ?>
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <a href="<?= base_url('?page=status_verifikasi') ?>" class="btn btn-secondary">Kembali</a>

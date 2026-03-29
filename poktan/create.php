@@ -18,7 +18,10 @@ $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fet
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand" href="<?= base_url() ?>">Monitoring CPCL BRMP</a>
+        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= base_url() ?>">
+            <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" height="36">
+            <span>Monitoring CPCL BRMP</span>
+        </a>
     </div>
 </nav>
 <div class="container py-4">
@@ -30,6 +33,11 @@ $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fet
                 <div class="mb-3">
                     <label class="form-label">Nama Poktan</label>
                     <input type="text" name="nama_poktan" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="form-label">Nama Ketua Poktan</label>
+                    <input type="text" name="nama_ketua_poktan" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
