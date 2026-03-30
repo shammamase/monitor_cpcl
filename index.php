@@ -9,7 +9,7 @@ $page = $_GET['page'] ?? 'status_verifikasi';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoring CPCL BRMP</title>
-
+    <link rel="icon" href="<?= base_url('assets/img/logo.png') ?>" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/css/style.css') ?>" rel="stylesheet">
@@ -42,8 +42,12 @@ $page = $_GET['page'] ?? 'status_verifikasi';
 
     <?php if ($page == 'poktan'): ?>
         <?php include __DIR__ . '/poktan/index.php'; ?>
-    <?php else: ?>
+    <?php elseif ($page == 'status_verifikasi'): ?>
         <?php include __DIR__ . '/status_verifikasi/index.php'; ?>
+    <?php elseif ($page == 'sumber_bantuan'): ?>
+        <?php include __DIR__ . '/sumber_bantuan/index.php'; ?>
+    <?php elseif ($page == 'jenis_bantuan'): ?>
+        <?php include __DIR__ . '/jenis_bantuan/index.php'; ?>
     <?php endif; ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
