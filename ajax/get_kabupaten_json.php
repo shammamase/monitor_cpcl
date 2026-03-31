@@ -10,7 +10,7 @@ if (!$provinsi_id) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT id, name FROM kabupatens WHERE provinsi_id = ? ORDER BY name ASC");
+$stmt = $pdo->prepare("SELECT id, type, name FROM kabupatens WHERE provinsi_id = ? ORDER BY name ASC");
 $stmt->execute([$provinsi_id]);
 
 echo json_encode($stmt->fetchAll());

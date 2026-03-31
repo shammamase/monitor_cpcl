@@ -3,7 +3,9 @@ require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/functions.php';
 
 $id_lama              = $_POST['id_status_verif'] ?? 0;
-$id_poktan            = $_POST['id_poktan'] ?? '';
+//$id_poktan            = $_POST['id_poktan'] ?? '';
+$provinsi_id         = trim($_POST['provinsi_id'] ?? '');
+$kabupaten_id        = trim($_POST['kabupaten_id'] ?? '');
 $id_sumber            = $_POST['id_sumber'] ?? '';
 $id_jenis_bantuan    = $_POST['id_jenis_bantuan'] ?? [];
 $status_verifikasi    = isset($_POST['status_verifikasi']) ? 1 : 0;
@@ -15,8 +17,14 @@ if ($id_lama <= 0) {
     die('ID data lama tidak valid.');
 }
 
+/*
 if ($id_poktan === '' || $id_sumber === '') {
     die('Data poktan dan sumber bantuan wajib diisi.');
+}
+*/
+
+if ($provinsi_id === '' || $kabupaten_id === '' || $id_sumber === '') {
+    die('Data provinsi, kabupaten, dan sumber bantuan wajib diisi.');
 }
 
 if (!is_array($id_jenis_bantuan) || count($id_jenis_bantuan) === 0) {
@@ -109,7 +117,8 @@ try {
     $stmtInsertBaru = $pdo->prepare("
         INSERT INTO status_verifikasi
         (
-            id_poktan,
+            provinsi_id,
+            kabupaten_id,
             id_sumber,
             status_verifikasi,
             tanggal_submit,
@@ -123,7 +132,8 @@ try {
         )
         VALUES
         (
-            :id_poktan,
+            :provinsi_id,
+            :kabupaten_id,
             :id_sumber,
             :status_verifikasi,
             :tanggal_submit,
@@ -138,7 +148,8 @@ try {
     ");
 
     $stmtInsertBaru->execute([
-        'id_poktan'          => $id_poktan,
+        'provinsi_id'        => $provinsi_id,
+        'kabupaten_id'       => $kabupaten_id,
         'id_sumber'          => $id_sumber,
         'status_verifikasi'  => $status_verifikasi,
         'tanggal_submit'     => $tanggal_submit,

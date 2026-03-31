@@ -32,9 +32,11 @@ $page = $_GET['page'] ?? 'status_verifikasi';
     </div>
 
     <ul class="nav nav-pills mb-4">
+        <!--
         <li class="nav-item me-2">
             <a class="nav-link <?= $page == 'poktan' ? 'active' : '' ?>" href="<?= base_url('?page=poktan') ?>">Poktan</a>
         </li>
+        -->
         <li class="nav-item">
             <a class="nav-link <?= $page == 'status_verifikasi' ? 'active' : '' ?>" href="<?= base_url('?page=status_verifikasi') ?>">Status Verifikasi</a>
         </li>
@@ -59,6 +61,30 @@ $(document).ready(function() {
     $('.select2-filter').select2({
         width: '100%',
         allowClear: true
+    });
+
+    $('#filter_provinsi_id').on('change', function() {
+        let provinsiId = $(this).val();
+
+        $('#filter_kabupaten_id').html('<option value="">-- Semua Kabupaten --</option>');
+
+        if (provinsiId) {
+            $.ajax({
+                url: '<?= base_url("ajax/get_kabupaten_json.php") ?>',
+                type: 'GET',
+                dataType: 'json',
+                data: { provinsi_id: provinsiId },
+                success: function(response) {
+                    let options = '<option value="">-- Semua Kabupaten --</option>';
+
+                    $.each(response, function(i, item) {
+                        options += `<option value="${item.id}">${item.type} ${item.name}</option>`;
+                    });
+
+                    $('#filter_kabupaten_id').html(options);
+                }
+            });
+        }
     });
 });
 </script>

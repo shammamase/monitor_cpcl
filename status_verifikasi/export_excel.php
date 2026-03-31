@@ -11,6 +11,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 
 $keyword        = trim($_GET['keyword_sv'] ?? '');
 $provinsi_id    = trim($_GET['provinsi_id'] ?? '');
+$kabupaten_id   = trim($_GET['kabupaten_id'] ?? '');
 $id_sumber      = trim($_GET['id_sumber'] ?? '');
 $status_filter  = trim($_GET['status_filter'] ?? '');
 $id_jenis       = trim($_GET['id_jenis_bantuan'] ?? '');
@@ -26,13 +27,19 @@ $where = [];
 $params = [];
 
 if ($keyword !== '') {
-    $where[] = "(p.nama_poktan LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
+    //$where[] = "(p.nama_poktan LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
+    $where[] = "(pr.name LIKE :keyword OR kb.name LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
     $params['keyword'] = "%{$keyword}%";
 }
 
 if ($provinsi_id !== '') {
-    $where[] = "p.provinsi_id = :provinsi_id";
+    $where[] = "sv.provinsi_id = :provinsi_id";
     $params['provinsi_id'] = $provinsi_id;
+}
+
+if ($kabupaten_id !== '') {
+    $where[] = "sv.kabupaten_id = :kabupaten_id";
+    $params['kabupaten_id'] = $kabupaten_id;
 }
 
 if ($id_sumber !== '') {
@@ -82,17 +89,13 @@ $sql = "SELECT
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
-            p.nama_poktan,
             pr.name AS provinsi,
             kb.name AS kabupaten,
-            kc.name AS kecamatan,
             sb.nama_sumber,
             GROUP_CONCAT(DISTINCT jb.nama_jenis_bantuan ORDER BY jb.nama_jenis_bantuan ASC SEPARATOR ', ') AS jenis_bantuan
         FROM status_verifikasi sv
-        LEFT JOIN poktan p ON sv.id_poktan = p.id_poktan
-        LEFT JOIN provinsis pr ON p.provinsi_id = pr.id
-        LEFT JOIN kabupatens kb ON p.kabupaten_id = kb.id
-        LEFT JOIN kecamatans kc ON p.kecamatan_id = kc.id
+        LEFT JOIN provinsis pr ON sv.provinsi_id = pr.id
+        LEFT JOIN kabupatens kb ON sv.kabupaten_id = kb.id
         LEFT JOIN sumber_bantuan sb ON sv.id_sumber = sb.id_sumber
         LEFT JOIN status_verifikasi_jenis_bantuan svjb ON sv.id_status_verif = svjb.id_status_verif
         LEFT JOIN jenis_bantuan jb ON svjb.id_jenis_bantuan = jb.id_jenis_bantuan
@@ -104,10 +107,8 @@ $sql = "SELECT
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
-            p.nama_poktan,
             pr.name,
             kb.name,
-            kc.name,
             sb.nama_sumber
         ORDER BY sv.id_status_verif DESC";
 
@@ -134,7 +135,7 @@ $sheet->setTitle('Status Verifikasi');
 | Judul
 |--------------------------------------------------------------------------
 */
-$sheet->mergeCells('A1:J1');
+$sheet->mergeCells('A1:I1');
 $sheet->setCellValue('A1', 'LAPORAN STATUS VERIFIKASI');
 
 $sheet->getStyle('A1')->applyFromArray([
@@ -154,24 +155,21 @@ $sheet->getStyle('A1')->applyFromArray([
 */
 $headers = [
     'A3' => 'No',
-    'B3' => 'Poktan',
-    'C3' => 'Provinsi',
-    'D3' => 'Kabupaten',
-    'E3' => 'Kecamatan',
-    'F3' => 'Sumber Bantuan',
-    'G3' => 'Status',
-    'H3' => 'Tanggal Submit',
-    'I3' => 'Jenis Bantuan',
-    'J3' => 'Keterangan Kendala',
-    'K3' => 'Keterangan Umum',
-    'L3' => 'Waktu Input',
+    'B3' => 'Provinsi',
+    'C3' => 'Kabupaten',
+    'D3' => 'Sumber Bantuan',
+    'E3' => 'Status',
+    'F3' => 'Tanggal Submit',
+    'G3' => 'Jenis Bantuan',
+    'H3' => 'Keterangan',
+    'I3' => 'Waktu Input',
 ];
 
 foreach ($headers as $cell => $text) {
     $sheet->setCellValue($cell, $text);
 }
 
-$sheet->getStyle('A3:L3')->applyFromArray([
+$sheet->getStyle('A3:I3')->applyFromArray([
     'font' => [
         'bold' => true,
         'color' => ['rgb' => 'FFFFFF'],
@@ -205,17 +203,14 @@ foreach ($data as $row) {
     $waktuInput = !empty($row['created_at']) ? date('d-m-Y H:i', strtotime($row['created_at'])) : '-';
 
     $sheet->setCellValue('A' . $rowNumber, $no++);
-    $sheet->setCellValue('B' . $rowNumber, $row['nama_poktan']);
-    $sheet->setCellValue('C' . $rowNumber, $row['provinsi']);
-    $sheet->setCellValue('D' . $rowNumber, $row['kabupaten']);
-    $sheet->setCellValue('E' . $rowNumber, $row['kecamatan']);
-    $sheet->setCellValue('F' . $rowNumber, $row['nama_sumber']);
-    $sheet->setCellValue('G' . $rowNumber, $statusText);
-    $sheet->setCellValue('H' . $rowNumber, $tanggalSubmit);
-    $sheet->setCellValue('I' . $rowNumber, $row['jenis_bantuan'] ?: '-');
-    $sheet->setCellValue('J' . $rowNumber, $row['keterangan_kendala'] ?: '-');
-    $sheet->setCellValue('K' . $rowNumber, $row['keterangan_umum'] ?: '-');
-    $sheet->setCellValue('L' . $rowNumber, $waktuInput);
+    $sheet->setCellValue('B' . $rowNumber, $row['provinsi']);
+    $sheet->setCellValue('C' . $rowNumber, $row['kabupaten']);
+    $sheet->setCellValue('D' . $rowNumber, $row['nama_sumber']);
+    $sheet->setCellValue('E' . $rowNumber, $statusText);
+    $sheet->setCellValue('F' . $rowNumber, $tanggalSubmit);
+    $sheet->setCellValue('G' . $rowNumber, $row['jenis_bantuan'] ?: '-');
+    $sheet->setCellValue('H' . $rowNumber, $row['keterangan_kendala'] ?: '-');
+    $sheet->setCellValue('I' . $rowNumber, $waktuInput);
 
     $rowNumber++;
 }
@@ -228,7 +223,7 @@ foreach ($data as $row) {
 $lastRow = $rowNumber - 1;
 
 if ($lastRow >= 4) {
-    $sheet->getStyle("A4:L{$lastRow}")->applyFromArray([
+    $sheet->getStyle("A4:I{$lastRow}")->applyFromArray([
         'alignment' => [
             'vertical' => Alignment::VERTICAL_TOP,
             'wrapText' => true,
@@ -248,17 +243,14 @@ if ($lastRow >= 4) {
 */
 $widths = [
     'A' => 6,
-    'B' => 28,
+    'B' => 18,
     'C' => 18,
     'D' => 18,
     'E' => 18,
     'F' => 20,
-    'G' => 12,
-    'H' => 15,
-    'I' => 35,
-    'J' => 30,
-    'K' => 30,
-    'L' => 20,
+    'G' => 30,
+    'H' => 35,
+    'I' => 20,
 ];
 
 foreach ($widths as $col => $width) {

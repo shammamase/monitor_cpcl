@@ -2,7 +2,9 @@
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/functions.php';
 
-$id_poktan          = $_POST['id_poktan'] ?? '';
+//$id_poktan          = $_POST['id_poktan'] ?? '';
+$provinsi_id        = $_POST['provinsi_id'] ?? '';
+$kabupaten_id       = $_POST['kabupaten_id'] ?? '';
 $id_sumber          = $_POST['id_sumber'] ?? '';
 $id_jenis_bantuan   = $_POST['id_jenis_bantuan'] ?? [];
 $status_verifikasi  = isset($_POST['status_verifikasi']) ? 1 : 0;
@@ -15,7 +17,7 @@ $keterangan_umum    = trim($_POST['keterangan_umum'] ?? '');
 | Validasi dasar
 |--------------------------------------------------------------------------
 */
-if ($id_poktan === '' || $id_sumber === '') {
+if ($provinsi_id === '' || $kabupaten_id === '' || $id_sumber === '') {
     die('Data wajib belum lengkap.');
 }
 
@@ -42,9 +44,10 @@ if ($status_verifikasi === 1) {
 $cek = $pdo->prepare("
     SELECT COUNT(*) AS total
     FROM status_verifikasi
-    WHERE id_poktan = ? AND id_sumber = ?
+    WHERE provinsi_id = ? AND kabupaten_id = ? AND id_sumber = ? AND is_active = 1
 ");
-$cek->execute([$id_poktan, $id_sumber]);
+$cek->execute([$provinsi_id, $kabupaten_id, $id_sumber]);
+
 $exists = $cek->fetch();
 
 if ((int)$exists['total'] > 0) {
@@ -61,7 +64,8 @@ try {
     */
     $sql = "INSERT INTO status_verifikasi
             (
-                id_poktan,
+                provinsi_id,
+                kabupaten_id,
                 id_sumber,
                 status_verifikasi,
                 tanggal_submit,
@@ -72,7 +76,8 @@ try {
             )
             VALUES
             (
-                :id_poktan,
+                :provinsi_id,
+                :kabupaten_id,
                 :id_sumber,
                 :status_verifikasi,
                 :tanggal_submit,
@@ -84,7 +89,9 @@ try {
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        'id_poktan'           => $id_poktan,
+        //'id_poktan'           => $id_poktan,
+        'provinsi_id'         => $provinsi_id,
+        'kabupaten_id'        => $kabupaten_id,
         'id_sumber'           => $id_sumber,
         'status_verifikasi'   => $status_verifikasi,
         'tanggal_submit'      => $tanggal_submit,

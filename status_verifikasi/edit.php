@@ -11,7 +11,7 @@
     if (!$data) {
         die('Data tidak ditemukan.');
     }
-
+    /*
     $stmtPoktan = $pdo->prepare("SELECT * FROM poktan WHERE id_poktan = ?");
     $stmtPoktan->execute([$data['id_poktan']]);
     $poktan = $stmtPoktan->fetch();
@@ -19,13 +19,13 @@
     if (!$poktan) {
         die('Data poktan tidak ditemukan.');
     }
-
+    */
     $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fetchAll();
 
     $stmtKab = $pdo->prepare("SELECT id, name FROM kabupatens WHERE provinsi_id = ? ORDER BY name ASC");
-    $stmtKab->execute([$poktan['provinsi_id']]);
+    $stmtKab->execute([$data['provinsi_id']]);
     $kabupaten = $stmtKab->fetchAll();
-
+    /*
     $stmtKec = $pdo->prepare("SELECT id, name FROM kecamatans WHERE kabupaten_id = ? ORDER BY name ASC");
     $stmtKec->execute([$poktan['kabupaten_id']]);
     $kecamatan = $stmtKec->fetchAll();
@@ -33,7 +33,7 @@
     $stmtPoktanList = $pdo->prepare("SELECT id_poktan, nama_poktan FROM poktan WHERE kecamatan_id = ? ORDER BY nama_poktan ASC");
     $stmtPoktanList->execute([$poktan['kecamatan_id']]);
     $poktanList = $stmtPoktanList->fetchAll();
-
+    */
     $sumber = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY nama_sumber ASC")->fetchAll();
 
     $stmtJenis = $pdo->prepare("
@@ -77,7 +77,7 @@
 <div class="container py-4">
     <div class="card">
         <div class="card-body">
-            <h4 class="mb-4">Edit Status Verifikasi</h4>
+            <h4 class="mb-4">Update Status Verifikasi</h4>
 
             <form action="<?= base_url('status_verifikasi/update.php') ?>" method="POST">
                 <input type="hidden" name="id_status_verif" value="<?= $data['id_status_verif'] ?>">
@@ -87,7 +87,7 @@
                     <select name="provinsi_id" id="provinsi_id" class="form-select select2" required>
                         <option value="">-- Pilih Provinsi --</option>
                         <?php foreach ($provinsi as $pr): ?>
-                            <option value="<?= $pr['id'] ?>" <?= $pr['id'] == $poktan['provinsi_id'] ? 'selected' : '' ?>>
+                            <option value="<?= $pr['id'] ?>" <?= $pr['id'] == $data['provinsi_id'] ? 'selected' : '' ?>>
                                 <?= e($pr['name']) ?>
                             </option>
                         <?php endforeach; ?>
@@ -99,13 +99,13 @@
                     <select name="kabupaten_id" id="kabupaten_id" class="form-select select2" required>
                         <option value="">-- Pilih Kabupaten --</option>
                         <?php foreach ($kabupaten as $kb): ?>
-                            <option value="<?= $kb['id'] ?>" <?= $kb['id'] == $poktan['kabupaten_id'] ? 'selected' : '' ?>>
+                            <option value="<?= $kb['id'] ?>" <?= $kb['id'] == $data['kabupaten_id'] ? 'selected' : '' ?>>
                                 <?= e($kb['name']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-
+                <!--
                 <div class="mb-3">
                     <label class="form-label">Kecamatan</label>
                     <select name="kecamatan_id" id="kecamatan_id" class="form-select select2" required>
@@ -129,7 +129,7 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-
+                -->
                 <div class="mb-3">
                     <label class="form-label">Sumber Bantuan</label>
                     <select name="id_sumber" id="id_sumber" class="form-select select2" required>
@@ -167,7 +167,7 @@
                 </div>
 
                 <div class="mb-3 <?= (int)$data['status_verifikasi'] === 1 ? 'd-none' : '' ?>" id="keterangan_kendala_wrapper">
-                    <label class="form-label">Keterangan Kendala</label>
+                    <label class="form-label">Keterangan</label>
                     <textarea name="keterangan_kendala" id="keterangan_kendala" class="form-control" rows="3"><?= e($data['keterangan_kendala']) ?></textarea>
                 </div>
                 <?php
@@ -217,9 +217,10 @@ $(document).ready(function() {
         let provinsiId = $(this).val();
 
         $('#kabupaten_id').html('<option value="">-- Pilih Kabupaten --</option>');
+        /*
         $('#kecamatan_id').html('<option value="">-- Pilih Kecamatan --</option>');
         $('#id_poktan').html('<option value="">-- Pilih Poktan --</option>');
-
+        */
         if (provinsiId) {
             $.ajax({
                 url: '<?= base_url("ajax/get_kabupaten.php") ?>',
@@ -232,6 +233,7 @@ $(document).ready(function() {
         }
     });
 
+    /*
     $('#kabupaten_id').on('change', function() {
         let kabupatenId = $(this).val();
 
@@ -266,6 +268,7 @@ $(document).ready(function() {
             });
         }
     });
+    */
 
     $('#id_sumber').on('change', function() {
         let idSumber = $(this).val();

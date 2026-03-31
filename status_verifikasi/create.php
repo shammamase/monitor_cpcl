@@ -47,20 +47,21 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
                         <option value="">-- Pilih Kabupaten --</option>
                     </select>
                 </div>
-
+                <!--
                 <div class="mb-3">
                     <label class="form-label">Kecamatan</label>
                     <select name="kecamatan_id" id="kecamatan_id" class="form-select select2" required>
                         <option value="">-- Pilih Kecamatan --</option>
                     </select>
                 </div>
-
+                
                 <div class="mb-3">
                     <label class="form-label">Poktan</label>
                     <select name="id_poktan" id="id_poktan" class="form-select select2" required>
                         <option value="">-- Pilih Poktan --</option>
                     </select>
                 </div>
+                -->
 
                 <div class="mb-3">
                     <label class="form-label">Sumber Bantuan</label>
@@ -91,7 +92,7 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
                 </div>
 
                 <div class="mb-3" id="keterangan_kendala_wrapper">
-                    <label class="form-label">Keterangan Kendala</label>
+                    <label class="form-label">Keterangan</label>
                     <textarea name="keterangan_kendala" class="form-control" rows="3"></textarea>
                 </div>
                 <?php 
@@ -141,8 +142,8 @@ $(document).ready(function() {
         let provinsiId = $(this).val();
 
         $('#kabupaten_id').html('<option value="">-- Pilih Kabupaten --</option>');
-        $('#kecamatan_id').html('<option value="">-- Pilih Kecamatan --</option>');
-        $('#id_poktan').html('<option value="">-- Pilih Poktan --</option>');
+        //$('#kecamatan_id').html('<option value="">-- Pilih Kecamatan --</option>');
+        //$('#id_poktan').html('<option value="">-- Pilih Poktan --</option>');
 
         if (provinsiId) {
             $.ajax({
@@ -156,6 +157,7 @@ $(document).ready(function() {
         }
     });
 
+    /*
     $('#kabupaten_id').on('change', function() {
         let kabupatenId = $(this).val();
 
@@ -190,6 +192,7 @@ $(document).ready(function() {
             });
         }
     });
+    */
 
     $('#id_sumber').on('change', function() {
         let idSumber = $(this).val();

@@ -4,6 +4,7 @@ require_once __DIR__ . '/../helpers/functions.php';
 
 $keyword        = trim($_GET['keyword_sv'] ?? '');
 $provinsi_id    = trim($_GET['provinsi_id'] ?? '');
+$kabupaten_id   = trim($_GET['kabupaten_id'] ?? '');
 $id_sumber      = trim($_GET['id_sumber'] ?? '');
 $status_filter  = trim($_GET['status_filter'] ?? '');
 $id_jenis       = trim($_GET['id_jenis_bantuan'] ?? '');
@@ -14,6 +15,20 @@ $limit          = 10;
 $offset         = ($page_number - 1) * $limit;
 
 $provinsiList = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fetchAll();
+
+$kabupatenList = [];
+
+if ($provinsi_id !== '') {
+    $stmtKab = $pdo->prepare("
+        SELECT id, name
+        FROM kabupatens
+        WHERE provinsi_id = ?
+        ORDER BY name ASC
+    ");
+    $stmtKab->execute([$provinsi_id]);
+    $kabupatenList = $stmtKab->fetchAll();
+}
+
 $sumberList   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY nama_sumber ASC")->fetchAll();
 
 $jenisListSql = "SELECT jb.id_jenis_bantuan, jb.nama_jenis_bantuan, sb.nama_sumber
@@ -31,13 +46,19 @@ $where = [];
 $params = [];
 
 if ($keyword !== '') {
-    $where[] = "(p.nama_poktan LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
+    //$where[] = "(p.nama_poktan LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
+    $where[] = "(pr.name LIKE :keyword OR kb.name LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
     $params['keyword'] = "%{$keyword}%";
 }
 
 if ($provinsi_id !== '') {
-    $where[] = "p.provinsi_id = :provinsi_id";
+    $where[] = "sv.provinsi_id = :provinsi_id";
     $params['provinsi_id'] = $provinsi_id;
+}
+
+if ($kabupaten_id !== '') {
+    $where[] = "sv.kabupaten_id = :kabupaten_id";
+    $params['kabupaten_id'] = $kabupaten_id;
 }
 
 if ($id_sumber !== '') {
@@ -82,7 +103,8 @@ if (!empty($where)) {
 */
 $countSql = "SELECT COUNT(DISTINCT sv.id_status_verif) AS total
              FROM status_verifikasi sv
-             LEFT JOIN poktan p ON sv.id_poktan = p.id_poktan
+             LEFT JOIN provinsis pr ON sv.provinsi_id = pr.id
+             LEFT JOIN kabupatens kb ON sv.kabupaten_id = kb.id
              LEFT JOIN sumber_bantuan sb ON sv.id_sumber = sb.id_sumber
              $whereSql";
 
@@ -113,17 +135,14 @@ $sql = "SELECT
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
-            p.nama_poktan,
             pr.name AS provinsi,
+            kb.type AS kabupaten_type,
             kb.name AS kabupaten,
-            kc.name AS kecamatan,
             sb.nama_sumber,
             GROUP_CONCAT(DISTINCT jb.nama_jenis_bantuan ORDER BY jb.nama_jenis_bantuan ASC SEPARATOR '||') AS jenis_bantuan_list
         FROM status_verifikasi sv
-        LEFT JOIN poktan p ON sv.id_poktan = p.id_poktan
-        LEFT JOIN provinsis pr ON p.provinsi_id = pr.id
-        LEFT JOIN kabupatens kb ON p.kabupaten_id = kb.id
-        LEFT JOIN kecamatans kc ON p.kecamatan_id = kc.id
+        LEFT JOIN provinsis pr ON sv.provinsi_id = pr.id
+        LEFT JOIN kabupatens kb ON sv.kabupaten_id = kb.id
         LEFT JOIN sumber_bantuan sb ON sv.id_sumber = sb.id_sumber
         LEFT JOIN status_verifikasi_jenis_bantuan svjb ON sv.id_status_verif = svjb.id_status_verif
         LEFT JOIN jenis_bantuan jb ON svjb.id_jenis_bantuan = jb.id_jenis_bantuan
@@ -136,10 +155,8 @@ $sql = "SELECT
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
-            p.nama_poktan,
             pr.name,
             kb.name,
-            kc.name,
             sb.nama_sumber
         ORDER BY sv.id_status_verif DESC
         LIMIT :limit OFFSET :offset";
@@ -187,7 +204,7 @@ if (!empty($rootIds)) {
 | Helper pagination URL
 |--------------------------------------------------------------------------
 */
-function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai)
+function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai)
 {
     $query = [
         'page' => 'status_verifikasi',
@@ -196,6 +213,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
 
     if ($keyword !== '') $query['keyword_sv'] = $keyword;
     if ($provinsi_id !== '') $query['provinsi_id'] = $provinsi_id;
+    if ($kabupaten_id !== '') $query['kabupaten_id'] = $kabupaten_id;
     if ($id_sumber !== '') $query['id_sumber'] = $id_sumber;
     if ($status_filter !== '') $query['status_filter'] = $status_filter;
     if ($id_jenis !== '') $query['id_jenis_bantuan'] = $id_jenis;
@@ -255,7 +273,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
 
         <form method="GET" action="<?= base_url() ?>" class="row g-2 mb-3">
             <input type="hidden" name="page" value="status_verifikasi">
-
+            <!--
             <div class="col-md-3">
                 <input type="text"
                        name="keyword_sv"
@@ -263,13 +281,24 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                        placeholder="Cari poktan / sumber bantuan..."
                        value="<?= e($keyword) ?>">
             </div>
-
+            -->
             <div class="col-md-3">
-                <select name="provinsi_id" class="form-select select2-filter">
+                <select name="provinsi_id" id="filter_provinsi_id" class="form-select select2-filter">
                     <option value="">-- Semua Provinsi --</option>
                     <?php foreach ($provinsiList as $prov): ?>
                         <option value="<?= $prov['id'] ?>" <?= ($provinsi_id == $prov['id']) ? 'selected' : '' ?>>
                             <?= e($prov['name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select name="kabupaten_id" id="filter_kabupaten_id" class="form-select select2-filter">
+                    <option value="">-- Semua Kabupaten --</option>
+                    <?php foreach ($kabupatenList as $kab): ?>
+                        <option value="<?= $kab['id'] ?>" <?= ($kabupaten_id == $kab['id']) ? 'selected' : '' ?>>
+                            <?= e($kab['name']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -325,6 +354,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                 <a href="<?= base_url('status_verifikasi/export_excel.php?' . http_build_query([
                     'keyword_sv' => $keyword,
                     'provinsi_id' => $provinsi_id,
+                    'kabupaten_id' => $kabupaten_id,
                     'id_sumber' => $id_sumber,
                     'status_filter' => $status_filter,
                     'id_jenis_bantuan' => $id_jenis,
@@ -345,12 +375,12 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                 <thead class="table-light">
                     <tr>
                         <th width="60">No</th>
-                        <th>Poktan</th>
-                        <th>Wilayah</th>
+                        <th>Provinsi</th>
+                        <th>Kabupaten</th>
                         <th>Sumber Bantuan</th>
                         <th>Status</th>
                         <th>Jenis Bantuan</th>
-                        <th>Keterangan Kendala</th>
+                        <th>Keterangan</th>
                         <!--<th>Keterangan Umum</th>-->
                         <th>Waktu Input</th>
                         <th width="180">Aksi</th>
@@ -367,6 +397,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                             ?>
                             <tr>
                                 <td><?= $offset + $i + 1 ?></td>
+                                <!--
                                 <td>
                                     <a href="<?= base_url('?' . http_build_query([
                                         'page' => 'status_verifikasi',
@@ -375,11 +406,15 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                                         <?= e($row['nama_poktan']) ?>
                                     </a>
                                 </td>
+                                
                                 <td class="sv-meta">
                                     <strong><?= e($row['provinsi']) ?></strong>
                                     <small><?= e($row['kabupaten']) ?></small>
                                     <small><?= e($row['kecamatan']) ?></small>
                                 </td>
+                                -->
+                                <td><?= e($row['provinsi']) ?></td>
+                                <td><?= e($row['kabupaten_type']) ?> <?= e($row['kabupaten']) ?></td>
                                 <td><?= e($row['nama_sumber']) ?></td>
                                 <td class="status-box">
                                     <?php if ((int)$row['status_verifikasi'] === 1): ?>
@@ -445,7 +480,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
             <nav class="mt-4">
                 <ul class="pagination flex-wrap">
                     <li class="page-item <?= ($page_number <= 1) ? 'disabled' : '' ?>">
-                        <a class="page-link" href="<?= ($page_number <= 1) ? '#' : buildPageUrl($page_number - 1, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
+                        <a class="page-link" href="<?= ($page_number <= 1) ? '#' : buildPageUrl($page_number - 1, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
                             Sebelumnya
                         </a>
                     </li>
@@ -457,7 +492,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
 
                     <?php if ($start > 1): ?>
                         <li class="page-item">
-                            <a class="page-link" href="<?= buildPageUrl(1, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">1</a>
+                            <a class="page-link" href="<?= buildPageUrl(1, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">1</a>
                         </li>
                         <?php if ($start > 2): ?>
                             <li class="page-item disabled"><span class="page-link">...</span></li>
@@ -466,7 +501,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
 
                     <?php for ($i = $start; $i <= $end; $i++): ?>
                         <li class="page-item <?= ($i == $page_number) ? 'active' : '' ?>">
-                            <a class="page-link" href="<?= buildPageUrl($i, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
+                            <a class="page-link" href="<?= buildPageUrl($i, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
                                 <?= $i ?>
                             </a>
                         </li>
@@ -477,12 +512,12 @@ function buildPageUrl($page, $keyword, $provinsi_id, $id_sumber, $status_filter,
                             <li class="page-item disabled"><span class="page-link">...</span></li>
                         <?php endif; ?>
                         <li class="page-item">
-                            <a class="page-link" href="<?= buildPageUrl($totalPage, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>"><?= $totalPage ?></a>
+                            <a class="page-link" href="<?= buildPageUrl($totalPage, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>"><?= $totalPage ?></a>
                         </li>
                     <?php endif; ?>
 
                     <li class="page-item <?= ($page_number >= $totalPage) ? 'disabled' : '' ?>">
-                        <a class="page-link" href="<?= ($page_number >= $totalPage) ? '#' : buildPageUrl($page_number + 1, $keyword, $provinsi_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
+                        <a class="page-link" href="<?= ($page_number >= $totalPage) ? '#' : buildPageUrl($page_number + 1, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, $status_filter, $id_jenis, $tanggal_dari, $tanggal_sampai) ?>">
                             Berikutnya
                         </a>
                     </li>
