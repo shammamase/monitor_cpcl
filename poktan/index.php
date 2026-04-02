@@ -188,11 +188,11 @@ function buildPoktanPageUrl($page, $keyword, $provinsi_id, $kabupaten_id)
                     <tr>
                         <th width="60">No</th>
                         <th>Nama Poktan</th>
-                        <th>Nama Ketua Poktan</th>
-                        <th>Alamat</th>
+                        <th>Nama Ketua Poktan</th>                        
                         <th>Provinsi</th>
                         <th>Kabupaten</th>
                         <th>Kecamatan</th>
+			<th>Desa</th>
                         <th width="180">Aksi</th>
                     </tr>
                 </thead>
@@ -203,10 +203,10 @@ function buildPoktanPageUrl($page, $keyword, $provinsi_id, $kabupaten_id)
                                 <td><?= $offset + $i + 1 ?></td>
                                 <td><?= e($row['nama_poktan']) ?></td>
                                 <td><?= e($row['nama_ketua_poktan']) ?></td>
-                                <td><?= e($row['alamat']) ?></td>
                                 <td><?= e($row['provinsi']) ?></td>
                                 <td><?= e($row['kabupaten']) ?></td>
                                 <td><?= e($row['kecamatan']) ?></td>
+                                <td><?= e($row['alamat']) ?></td>
                                 <td>
                                     <a href="<?= base_url('poktan/edit.php?id=' . $row['id_poktan']) ?>" class="btn btn-sm btn-warning">Edit</a>
                                     <a href="<?= base_url('poktan/delete.php?id=' . $row['id_poktan']) ?>" 

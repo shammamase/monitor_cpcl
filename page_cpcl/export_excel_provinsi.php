@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/auth_check.php';
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../helpers/functions.php';
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -9,14 +10,17 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-$keyword        = trim($_GET['keyword_sv'] ?? '');
-$provinsi_id    = trim($_GET['provinsi_id'] ?? '');
+$provinsi_id    = (int)($userLogin['provinsi_id'] ?? 0);
 $kabupaten_id   = trim($_GET['kabupaten_id'] ?? '');
 $id_sumber      = trim($_GET['id_sumber'] ?? '');
 $status_filter  = trim($_GET['status_filter'] ?? '');
 $id_jenis       = trim($_GET['id_jenis_bantuan'] ?? '');
 $tanggal_dari   = trim($_GET['tanggal_dari'] ?? '');
 $tanggal_sampai = trim($_GET['tanggal_sampai'] ?? '');
+
+if ($provinsi_id <= 0) {
+    die('Provinsi user tidak valid.');
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -26,16 +30,10 @@ $tanggal_sampai = trim($_GET['tanggal_sampai'] ?? '');
 $where = [];
 $params = [];
 
-if ($keyword !== '') {
-    //$where[] = "(p.nama_poktan LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
-    $where[] = "(pr.name LIKE :keyword OR kb.name LIKE :keyword OR sb.nama_sumber LIKE :keyword)";
-    $params['keyword'] = "%{$keyword}%";
-}
+$where[] = "sv.provinsi_id = :provinsi_id";
+$params['provinsi_id'] = $provinsi_id;
 
-if ($provinsi_id !== '') {
-    $where[] = "sv.provinsi_id = :provinsi_id";
-    $params['provinsi_id'] = $provinsi_id;
-}
+$where[] = "sv.is_active = 1";
 
 if ($kabupaten_id !== '') {
     $where[] = "sv.kabupaten_id = :kabupaten_id";
@@ -137,7 +135,7 @@ $sheet->setTitle('Status Verifikasi');
 |--------------------------------------------------------------------------
 */
 $sheet->mergeCells('A1:I1');
-$sheet->setCellValue('A1', 'LAPORAN STATUS VERIFIKASI');
+$sheet->setCellValue('A1', 'LAPORAN STATUS VERIFIKASI PROVINSI - ' . strtoupper($userLogin['nama_provinsi'] ?? ''));
 
 $sheet->getStyle('A1')->applyFromArray([
     'font' => [
@@ -163,6 +161,7 @@ $headers = [
     'F3' => 'Tanggal Submit',
     'G3' => 'Jenis Bantuan',
     'H3' => 'Keterangan',
+    // 'I3' => 'Keterangan Umum',
     'I3' => 'Waktu Input',
 ];
 
@@ -177,7 +176,7 @@ $sheet->getStyle('A3:I3')->applyFromArray([
     ],
     'fill' => [
         'fillType' => Fill::FILL_SOLID,
-        'startColor' => ['rgb' => '0D6EFD'],
+        'startColor' => ['rgb' => '198754'],
     ],
     'alignment' => [
         'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -211,6 +210,7 @@ foreach ($data as $row) {
     $sheet->setCellValue('F' . $rowNumber, $tanggalSubmit);
     $sheet->setCellValue('G' . $rowNumber, $row['jenis_bantuan'] ?: '-');
     $sheet->setCellValue('H' . $rowNumber, $row['keterangan_kendala'] ?: '-');
+    //$sheet->setCellValue('I' . $rowNumber, $row['keterangan_umum'] ?: '-');
     $sheet->setCellValue('I' . $rowNumber, $waktuInput);
 
     $rowNumber++;
@@ -246,12 +246,13 @@ $widths = [
     'A' => 6,
     'B' => 18,
     'C' => 18,
-    'D' => 18,
-    'E' => 18,
-    'F' => 20,
-    'G' => 30,
-    'H' => 35,
-    'I' => 20,
+    'D' => 20,
+    'E' => 20,
+    'F' => 15,
+    'G' => 35,
+    'H' => 30,
+    'I' => 30,
+    // 'J' => 20,
 ];
 
 foreach ($widths as $col => $width) {
@@ -270,7 +271,7 @@ $sheet->freezePane('A4');
 | Output file
 |--------------------------------------------------------------------------
 */
-$filename = 'status_verifikasi_' . date('Ymd_His') . '.xlsx';
+$filename = 'status_verifikasi_' . preg_replace('/[^A-Za-z0-9_\-]/', '_', strtolower($userLogin['nama_provinsi'] ?? 'provinsi')) . '_' . date('Ymd_His') . '.xlsx';
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 header('Content-Disposition: attachment;filename="' . $filename . '"');
