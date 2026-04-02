@@ -1,8 +1,8 @@
 <?php
-$host = 'localhost:3307';
+$host = 'localhost';
 $dbname = 'db_lap_cpcl';
 $username = 'root';
-$password = 'root';
+$password = '';
 
 try {
     $pdo = new PDO(

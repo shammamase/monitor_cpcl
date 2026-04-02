@@ -93,11 +93,21 @@ unset($row);
 
         .province-card {
             transition: transform .18s ease, box-shadow .18s ease;
+            background: #fff;
         }
 
         .province-link:hover .province-card {
             transform: translateY(-4px);
             box-shadow: 0 14px 32px rgba(0,0,0,0.10);
+        }
+
+        .province-card-empty {
+            border: 1px solid rgba(220, 53, 69, 0.18);
+            background: linear-gradient(135deg, rgba(220, 53, 69, 0.10), rgba(220, 53, 69, 0.04));
+        }
+
+        .province-card-empty .province-name {
+            color: #b02a37;
         }
 
         .province-name {
@@ -155,6 +165,12 @@ unset($row);
             font-weight: 600;
         }
 
+        .badge-soft-danger {
+            background: rgba(220, 53, 69, 0.12);
+            color: #dc3545;
+            font-weight: 600;
+        }
+
         .progress-label {
             font-size: .85rem;
             color: #6c757d;
@@ -200,7 +216,7 @@ unset($row);
         <div class="col-md-2">
             <div class="card summary-card h-100" style="background: linear-gradient(135deg, #20c997, #198754);">
                 <div class="card-body">
-                    <div class="label">Sudah</div>
+                    <div class="label">Sudah Submit ke Es.1</div>
                     <div class="value"><?= number_format($totalSudah) ?></div>
                 </div>
             </div>
@@ -219,18 +235,24 @@ unset($row);
     <div class="row g-3">
         <?php foreach ($data as $row): ?>
             <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                <a href="<?= base_url('public_monitoring.php?' . http_build_query([
-                    'provinsi_id' => $row['id']
+                <a href="<?= base_url('status_verifikasi/list_monitor_cpcl.php?' . http_build_query([
+                    'provinsi_id' => $row['id'], 'kabupaten_id' => null, 'id_sumber' => null, 'status_filter' => null,
+                    'jenis_bantuan' => null, 'tanggal_dari' => null, 'tanggal_sampai' => null
                 ])) ?>" class="province-link">
-                    <div class="card province-card h-100">
+                    <div class="card province-card h-100 <?= ((int)$row['total_input'] === 0) ? 'province-card-empty' : '' ?>">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
                                 <div class="province-name">
                                     <?= e($row['nama_provinsi']) ?>
                                 </div>
-                                <span class="badge badge-soft-primary">
-                                    <?= number_format($row['persen_sudah'], 1) ?>%
-                                </span>
+
+                                <?php if ((int)$row['total_input'] === 0): ?>
+                                    <span class="badge badge-soft-danger">Belum Input</span>
+                                <?php else: ?>
+                                    <span class="badge badge-soft-primary">
+                                        <?= number_format($row['persen_sudah'], 1) ?>%
+                                    </span>
+                                <?php endif; ?>
                             </div>
 
                             <div class="mb-2">
@@ -240,10 +262,10 @@ unset($row);
                                 </div>
                                 <div class="progress">
                                     <div 
-                                        class="progress-bar bg-success" 
+                                        class="progress-bar <?= ((int)$row['total_input'] === 0) ? 'bg-danger' : 'bg-success' ?>"
                                         role="progressbar"
-                                        style="width: <?= $row['persen_sudah'] ?>%;"
-                                        aria-valuenow="<?= $row['persen_sudah'] ?>"
+                                        style="width: <?= ((int)$row['total_input'] === 0) ? '100' : $row['persen_sudah'] ?>%;"
+                                        aria-valuenow="<?= ((int)$row['total_input'] === 0) ? 100 : $row['persen_sudah'] ?>"
                                         aria-valuemin="0"
                                         aria-valuemax="100">
                                     </div>
@@ -253,7 +275,13 @@ unset($row);
                             <div class="row g-2 mt-1">
                                 <div class="col-12">
                                     <div class="mini-stat">
-                                        <div class="mini-value"><?= number_format($row['total_input']) ?></div>
+                                        <div class="mini-value">
+                                            <?php if ((int)$row['total_input'] === 0): ?>
+                                                <span class="badge badge-soft-danger"><?= number_format($row['total_input']) ?></span>
+                                            <?php else: ?>
+                                                <?= number_format($row['total_input']) ?>
+                                            <?php endif; ?>
+                                        </div>
                                         <div class="mini-label">Sudah Diinput</div>
                                     </div>
                                 </div>
