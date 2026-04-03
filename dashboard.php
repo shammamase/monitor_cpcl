@@ -235,7 +235,7 @@ unset($row);
     <div class="row g-3">
         <?php foreach ($data as $row): ?>
             <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
-                <a href="<?= base_url('status_verifikasi/list_monitor_cpcl.php?' . http_build_query([
+                <a href="<?= base_url('index.php?' . http_build_query([
                     'provinsi_id' => $row['id'], 'kabupaten_id' => null, 'id_sumber' => null, 'status_filter' => null,
                     'jenis_bantuan' => null, 'tanggal_dari' => null, 'tanggal_sampai' => null
                 ])) ?>" class="province-link">
