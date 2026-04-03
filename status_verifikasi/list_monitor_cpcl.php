@@ -220,7 +220,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
     if ($tanggal_dari !== '') $query['tanggal_dari'] = $tanggal_dari;
     if ($tanggal_sampai !== '') $query['tanggal_sampai'] = $tanggal_sampai;
 
-    return base_url('index.php?' . http_build_query($query));
+    return base_url('status_verifikasi/list_monitor_cpcl.php?' . http_build_query($query));
 }
 ?>
 <!doctype html>
