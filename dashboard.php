@@ -181,9 +181,9 @@ unset($row);
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= base_url('dashboard_ringkasan_provinsi.php') ?>">
+        <a class="navbar-brand d-flex align-items-center gap-2 btn btn-outline-warning" href="<?= base_url('index.php') ?>">
             <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" height="36">
-            <span>Dashboard Ringkasan CPCL</span>
+            <span>Monitoring CPCL</span>
         </a>
     </div>
 </nav>

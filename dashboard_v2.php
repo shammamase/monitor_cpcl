@@ -7,6 +7,39 @@ require_once __DIR__ . '/helpers/functions.php';
 | Ambil ringkasan per provinsi
 |--------------------------------------------------------------------------
 */
+function sortUrl($column, $currentSortBy, $currentSortDir)
+{
+    $nextDir = 'desc';
+
+    if ($currentSortBy === $column) {
+        $nextDir = $currentSortDir === 'desc' ? 'asc' : 'desc';
+    }
+
+    return base_url('dashboard_v2.php?' . http_build_query([
+        'sort_by' => $column,
+        'sort_dir' => $nextDir,
+    ]));
+}
+
+function sortIcon($column, $currentSortBy, $currentSortDir)
+{
+    if ($currentSortBy !== $column) {
+        return '↕';
+    }
+
+    return $currentSortDir === 'desc' ? '↓' : '↑';
+}
+
+$sort_by = $_GET['sort_by'] ?? 'total_input';
+$sort_dir = $_GET['sort_dir'] ?? 'desc';
+
+$allowedSort = ['total_input', 'total_sudah', 'total_belum'];
+if (!in_array($sort_by, $allowedSort, true)) {
+    $sort_by = 'total_input';
+}
+
+$orderBy = "ORDER BY {$sort_by} " . strtoupper($sort_dir) . ", p.name ASC";
+
 $sql = "
     SELECT
         p.id,
@@ -19,7 +52,7 @@ $sql = "
         ON sv.provinsi_id = p.id
        AND sv.is_active = 1
     GROUP BY p.id, p.name
-    ORDER BY total_input DESC, p.name ASC
+    {$orderBy}
 ";
 
 $stmt = $pdo->query($sql);
@@ -89,6 +122,14 @@ unset($row);
         .table td,
         .table th {
             vertical-align: middle;
+        }
+
+        .table th a {
+            font-weight: 600;
+        }
+
+        .table th a:hover {
+            color: #198754 !important;
         }
 
         .row-clickable {
@@ -164,9 +205,9 @@ unset($row);
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center gap-2" href="<?= base_url('dashboard_ringkasan_provinsi_tabel.php') ?>">
+        <a class="navbar-brand d-flex align-items-center gap-2 btn btn-outline-warning" href="<?= base_url('index.php') ?>">
             <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo" height="36">
-            <span>Dashboard Ringkasan CPCL</span>
+            <span>Monitoring CPCL</span>
         </a>
     </div>
 </nav>
@@ -199,7 +240,7 @@ unset($row);
         <div class="col-md-2">
             <div class="card summary-card h-100" style="background: linear-gradient(135deg, #20c997, #198754);">
                 <div class="card-body">
-                    <div class="label">Sudah</div>
+                    <div class="label">Sudah Submit ke Es.1</div>
                     <div class="value"><?= number_format($totalSudah) ?></div>
                 </div>
             </div>
@@ -223,9 +264,21 @@ unset($row);
                         <tr>
                             <th width="60">No</th>
                             <th>Provinsi</th>
-                            <th width="150">Sudah Diinput</th>
-                            <th width="150">Sudah</th>
-                            <th width="150">Belum</th>
+                            <th width="150">
+                                <a href="<?= sortUrl('total_input', $sort_by, $sort_dir) ?>" class="text-decoration-none text-dark">
+                                    Sudah Diinput <?= sortIcon('total_input', $sort_by, $sort_dir) ?>
+                                </a>
+                            </th>
+                            <th width="150">
+                                <a href="<?= sortUrl('total_sudah', $sort_by, $sort_dir) ?>" class="text-decoration-none text-dark">
+                                    Sudah <?= sortIcon('total_sudah', $sort_by, $sort_dir) ?>
+                                </a>
+                            </th>
+                            <th width="150">
+                                <a href="<?= sortUrl('total_belum', $sort_by, $sort_dir) ?>" class="text-decoration-none text-dark">
+                                    Belum <?= sortIcon('total_belum', $sort_by, $sort_dir) ?>
+                                </a>
+                            </th>
                             <th width="240">Progress</th>
                         </tr>
                     </thead>

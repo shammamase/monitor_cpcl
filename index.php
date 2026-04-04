@@ -293,6 +293,9 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
         <li class="nav-item me-2">
             <a class="nav-link active" href="<?= base_url('dashboard.php') ?>">Dashboard Rekap Provinsi</a>
         </li>
+        <li class="nav-item me-2">
+            <a class="nav-link active" href="<?= base_url('dashboard_v2.php') ?>">Rangking Per Provinsi</a>
+        </li>
     </ul>
 
 
