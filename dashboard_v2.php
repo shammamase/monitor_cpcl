@@ -44,9 +44,34 @@ $sql = "
     SELECT
         p.id,
         p.name AS nama_provinsi,
-        COUNT(sv.id_status_verif) AS total_input,
+        SUM(
+            CASE
+                WHEN sv.status_verifikasi = 1 THEN 1
+                WHEN sv.status_verifikasi = 0
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM status_verifikasi sv2
+                        WHERE sv2.root_id = sv.root_id
+                        AND sv2.status_verifikasi = 1
+                    )
+                THEN 1
+                ELSE 0
+            END
+        ) AS total_input,
         SUM(CASE WHEN sv.status_verifikasi = 1 THEN 1 ELSE 0 END) AS total_sudah,
-        SUM(CASE WHEN sv.status_verifikasi = 0 THEN 1 ELSE 0 END) AS total_belum
+        SUM(
+            CASE 
+                WHEN sv.status_verifikasi = 0
+                    AND NOT EXISTS (
+                        SELECT 1
+                        FROM status_verifikasi sv2
+                        WHERE sv2.root_id = sv.root_id
+                        AND sv2.status_verifikasi = 1
+                    )
+                THEN 1
+                ELSE 0
+            END
+        ) AS total_belum
     FROM provinsis p
     LEFT JOIN status_verifikasi sv
         ON sv.provinsi_id = p.id
