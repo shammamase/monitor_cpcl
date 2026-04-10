@@ -38,7 +38,13 @@ $page = $_GET['page'] ?? 'status_verifikasi';
         </li>
         -->
         <li class="nav-item">
-            <a class="nav-link <?= $page == 'status_verifikasi' ? 'active' : '' ?>" href="<?= base_url('index.php') ?>">Status Verifikasi</a>
+            <a class="nav-link <?= $page == 'status_verifikasi' ? 'active' : '' ?>" href="<?= base_url('indexyz.php') ?>">Status Verifikasi</a>
+        </li>
+        <li class="nav-item me-2">
+            <a class="nav-link <?= $page == 'satker' ? 'active' : '' ?>" href="<?= base_url('indexyz.php?page=satker') ?>">Satker</a>
+        </li>
+        <li class="nav-item me-2">
+            <a class="nav-link <?= $page == 'users' ? 'active' : '' ?>" href="<?= base_url('indexyz.php?page=users') ?>">User</a>
         </li>
     </ul>
 
@@ -50,6 +56,10 @@ $page = $_GET['page'] ?? 'status_verifikasi';
         <?php include __DIR__ . '/sumber_bantuan/index.php'; ?>
     <?php elseif ($page == 'jenis_bantuan'): ?>
         <?php include __DIR__ . '/jenis_bantuan/index.php'; ?>
+    <?php elseif ($page == 'satker'): ?>
+        <?php include __DIR__ . '/satker/index.php'; ?>
+    <?php elseif ($page == 'users'): ?>
+        <?php include __DIR__ . '/users/index.php'; ?>
     <?php endif; ?>
 </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
