@@ -137,9 +137,20 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
             font-size: .95rem;
         }
 
+        body {
+            background: #f4f7f6;
+            overflow-x: hidden;
+        }
+
+        .layout-shell {
+            min-height: calc(100vh - 64px);
+            overflow-x: hidden;
+        }
+
         .content-area {
             padding: 24px;
             flex: 1;
+            min-width: 0;
         }
 
         .page-card {
@@ -265,6 +276,9 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                     <div class="collapse show submenu" id="submenuMasterDesktop">
                         <ul class="nav flex-column">
                             <li class="nav-item mb-1">
+                                <a href="<?= base_url('page_upbs/upbs/index.php') ?>" class="nav-link <?= isActiveSubmenu('upbs', $activeSubmenu) ?>">UPBS</a>
+                            </li>
+                            <li class="nav-item mb-1">
                                 <a href="<?= base_url('page_upbs/komoditas/index.php') ?>" class="nav-link <?= isActiveSubmenu('komoditas', $activeSubmenu) ?>">Komoditas</a>
                             </li>
                             <li class="nav-item mb-1">
@@ -277,14 +291,14 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                                 <a href="<?= base_url('page_upbs/satuan/index.php') ?>" class="nav-link <?= isActiveSubmenu('satuan', $activeSubmenu) ?>">Satuan</a>
                             </li>
                             <li class="nav-item mb-1">
-                                <a href="#" class="nav-link <?= isActiveSubmenu('benih_sumber', $activeSubmenu) ?>">Benih Sumber</a>
+                                <a href="<?= base_url('page_upbs/benih_sumber/index.php') ?>" class="nav-link <?= isActiveSubmenu('benih_sumber', $activeSubmenu) ?>">Benih Sumber</a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
+                    <a href="<?= base_url('page_upbs/input_stok/index.php') ?>" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
                         <span class="menu-label-wrap">
                             <span class="menu-icon">I</span>
                             <span>Input Stok</span>
@@ -293,7 +307,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
+                    <a href="<?= base_url('page_upbs/profil/index.php') ?>" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
                         <span class="menu-label-wrap">
                             <span class="menu-icon">P</span>
                             <span>Profil</span>
@@ -347,6 +361,9 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                     <div class="collapse show submenu" id="submenuMasterMobile">
                         <ul class="nav flex-column">
                             <li class="nav-item mb-1">
+                                <a href="<?= base_url('page_upbs/upbs/index.php') ?>" class="nav-link <?= isActiveSubmenu('upbs', $activeSubmenu) ?>">UPBS</a>
+                            </li>
+                            <li class="nav-item mb-1">
                                 <a href="<?= base_url('page_upbs/komoditas/index.php') ?>" class="nav-link <?= isActiveSubmenu('komoditas', $activeSubmenu) ?>">Komoditas</a>
                             </li>
                             <li class="nav-item mb-1">
@@ -359,14 +376,14 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                                 <a href="<?= base_url('page_upbs/satuan/index.php') ?>" class="nav-link <?= isActiveSubmenu('satuan', $activeSubmenu) ?>">Satuan</a>
                             </li>
                             <li class="nav-item mb-1">
-                                <a href="#" class="nav-link <?= isActiveSubmenu('benih_sumber', $activeSubmenu) ?>">Benih Sumber</a>
+                                <a href="<?= base_url('page_upbs/benih_sumber/index.php') ?>" class="nav-link <?= isActiveSubmenu('benih_sumber', $activeSubmenu) ?>">Benih Sumber</a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
+                    <a href="<?= base_url('page_upbs/input_stok/index.php') ?>" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
                         <span class="menu-label-wrap">
                             <span class="menu-icon">I</span>
                             <span>Input Stok</span>
@@ -375,7 +392,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 </li>
 
                 <li class="nav-item mb-1">
-                    <a href="#" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
+                    <a href="<?= base_url('page_upbs/profil/index.php') ?>" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
                         <span class="menu-label-wrap">
                             <span class="menu-icon">P</span>
                             <span>Profil</span>
