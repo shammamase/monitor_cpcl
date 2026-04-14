@@ -23,46 +23,64 @@ function publicActive(string $page, string $activePublicPage): string
         :root {
             --brand-green: #198754;
             --brand-green-dark: #146c43;
+            --brand-green-soft: rgba(25,135,84,.12);
             --brand-light: #f6fbf8;
             --brand-border: #e7efe9;
             --text-soft: #6c757d;
+            --text-main: #1f2937;
+            --surface-card: #ffffff;
+        }
+
+        html, body {
+            overflow-x: hidden;
         }
 
         body {
             background: #f7f8fa;
-            color: #212529;
-            overflow-x: hidden;
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
 
         .public-navbar {
             background: rgba(255,255,255,.96);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
             border-bottom: 1px solid #edf0f2;
         }
 
         .public-brand {
-            font-weight: 700;
+            font-weight: 800;
             color: var(--brand-green-dark);
+            letter-spacing: -.2px;
         }
 
         .public-brand img {
             height: 38px;
             width: auto;
+            object-fit: contain;
         }
 
         .navbar-nav .nav-link {
-            font-weight: 500;
-            color: #ffffff;
+            font-weight: 600;
+            color: #334155;
+            border-radius: 999px;
+            padding: .55rem .95rem;
         }
 
         .navbar-nav .nav-link.active,
         .navbar-nav .nav-link:hover {
-            color: #cdf214;
+            color: var(--brand-green);
+            background: rgba(25,135,84,.08);
+        }
+
+        .navbar-cta {
+            border-radius: 999px;
+            font-weight: 600;
+            padding-inline: 16px;
         }
 
         .hero-public {
             background:
-                radial-gradient(circle at top right, rgba(25,135,84,.12), transparent 28%),
+                radial-gradient(circle at top right, rgba(25,135,84,.14), transparent 28%),
                 linear-gradient(135deg, #ffffff, #f6fbf8);
             border: 1px solid var(--brand-border);
             border-radius: 28px;
@@ -71,16 +89,18 @@ function publicActive(string $page, string $activePublicPage): string
         }
 
         .hero-title {
-            font-size: 2.2rem;
+            font-size: 2.25rem;
             font-weight: 800;
-            line-height: 1.15;
+            line-height: 1.12;
             color: #163020;
+            letter-spacing: -.5px;
         }
 
         .hero-subtitle {
             color: #4b5563;
             max-width: 760px;
             font-size: 1rem;
+            line-height: 1.65;
         }
 
         .search-shell {
@@ -92,18 +112,21 @@ function publicActive(string $page, string $activePublicPage): string
         }
 
         .stats-card,
-        .filter-card,
         .catalog-card,
         .province-card,
         .detail-card,
-        .info-card {
+        .info-card,
+        .metric-card,
+        .meta-card,
+        .related-card {
             border: 0;
             border-radius: 22px;
             box-shadow: 0 10px 24px rgba(0,0,0,.05);
+            background: var(--surface-card);
         }
 
         .stats-card {
-            background: #fff;
+            height: 100%;
         }
 
         .stats-icon {
@@ -113,16 +136,16 @@ function publicActive(string $page, string $activePublicPage): string
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(25,135,84,.12);
+            background: var(--brand-green-soft);
             color: var(--brand-green);
             font-size: 1.15rem;
         }
 
         .stats-value {
-            font-size: 1.6rem;
+            font-size: 1.65rem;
             font-weight: 800;
             line-height: 1;
-            color: #1f2937;
+            color: var(--text-main);
         }
 
         .stats-label {
@@ -133,11 +156,13 @@ function publicActive(string $page, string $activePublicPage): string
         .section-title {
             font-size: 1.4rem;
             font-weight: 800;
-            color: #1f2937;
+            color: var(--text-main);
+            letter-spacing: -.3px;
         }
 
         .section-subtitle {
             color: var(--text-soft);
+            line-height: 1.55;
         }
 
         .filter-chip {
@@ -157,29 +182,72 @@ function publicActive(string $page, string $activePublicPage): string
             border-radius: 20px;
             background: #fff;
             height: 100%;
-            transition: transform .18s ease, box-shadow .18s ease;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
         }
 
         .stock-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 14px 26px rgba(0,0,0,.07);
+            border-color: #dce7df;
         }
 
         .stock-title {
             font-size: 1.06rem;
             font-weight: 700;
-            color: #1f2937;
+            color: var(--text-main);
+            line-height: 1.4;
         }
 
         .stock-meta {
             font-size: .92rem;
             color: #6b7280;
+            line-height: 1.5;
         }
 
         .stock-number {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--brand-green-dark);
+            line-height: 1.2;
+        }
+
+        .province-card {
+            background: #fff;
+            border: 1px solid #edf1f3;
+            height: 100%;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+
+        .province-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(0,0,0,.07);
+            border-color: #dce7df;
+        }
+
+        .province-name {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .province-metric {
+            font-size: .92rem;
+            color: #6b7280;
+        }
+
+        .catalog-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .catalog-table {
+            min-width: 1100px;
+        }
+
+        .catalog-table th,
+        .catalog-table td {
+            vertical-align: middle;
+            white-space: nowrap;
         }
 
         .badge-soft-success {
@@ -202,48 +270,67 @@ function publicActive(string $page, string $activePublicPage): string
             color: #5c636a;
         }
 
-        .view-switch .btn.active {
-            background: var(--brand-green);
-            border-color: var(--brand-green);
-            color: #fff;
+        .label-muted,
+        .meta-label {
+            font-size: .88rem;
+            color: #6c757d;
+            margin-bottom: 4px;
         }
 
-        .catalog-table-wrap {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+        .value-strong,
+        .meta-value {
+            font-weight: 600;
+            color: var(--text-main);
         }
 
-        .catalog-table {
-            min-width: 1100px;
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--brand-green-dark);
+            line-height: 1.15;
         }
 
-        .catalog-table th,
-        .catalog-table td {
-            vertical-align: middle;
-            white-space: nowrap;
-        }
-
-        .province-card {
-            background: #fff;
-            border: 1px solid #edf1f3;
-            height: 100%;
-        }
-
-        .province-name {
-            font-size: 1rem;
-            font-weight: 700;
-            color: #1f2937;
-        }
-
-        .province-metric {
-            font-size: .92rem;
+        .metric-label {
             color: #6b7280;
+            font-size: .92rem;
+        }
+
+        .related-item {
+            border: 1px solid #edf1f3;
+            border-radius: 18px;
+            background: #fff;
+            height: 100%;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .related-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 26px rgba(0,0,0,.07);
         }
 
         .footer-public {
             background: #ffffff;
             border-top: 1px solid #eceff1;
             color: #6b7280;
+        }
+
+        .footer-title {
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .public-breadcrumb {
+            font-size: .92rem;
+            color: #6b7280;
+        }
+
+        .public-breadcrumb a {
+            color: var(--brand-green-dark);
+            text-decoration: none;
+        }
+
+        .public-breadcrumb a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 991.98px) {
@@ -254,18 +341,23 @@ function publicActive(string $page, string $activePublicPage): string
             .hero-title {
                 font-size: 1.7rem;
             }
+
+            .navbar-cta {
+                width: 100%;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg public-navbar sticky-top bg-success">
+<nav class="navbar navbar-expand-lg public-navbar sticky-top">
     <div class="container py-2">
         <a class="navbar-brand public-brand d-flex align-items-center gap-2" href="<?= base_url('public_upbs/index.php') ?>">
             <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo">
-            <span class="text-white">Portal Benih UPBS</span>
+            <span>Portal Benih UPBS</span>
         </a>
-
+        <!--
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar" aria-controls="publicNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" style="filter: invert(35%);"></span>
         </button>
@@ -276,16 +368,19 @@ function publicActive(string $page, string $activePublicPage): string
                     <a class="nav-link <?= publicActive('home', $activePublicPage) ?>" href="<?= base_url('public_upbs/index.php') ?>">Beranda</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('public_upbs/index.php#katalog') ?>">Katalog Benih</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= base_url('public_upbs/index.php#sebaran') ?>">Sebaran Wilayah</a>
+                    <a class="nav-link" href="<?= base_url('public_upbs/index.php') ?>">Komoditas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= base_url('public_upbs/index.php#tentang') ?>">Tentang</a>
                 </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-success navbar-cta" href="<?= base_url('public_upbs/index.php') ?>">
+                        <i class="bi bi-search me-1"></i> Cari Benih
+                    </a>
+                </li>
             </ul>
         </div>
+        -->
     </div>
 </nav>
 

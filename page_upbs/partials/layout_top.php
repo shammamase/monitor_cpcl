@@ -20,6 +20,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
 
     <link rel="icon" type="image/png" href="<?= base_url('assets/img/favicon.png') ?>">
     <link rel="shortcut icon" href="<?= base_url('assets/img/favicon.ico') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -114,17 +115,11 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
         }
 
         .menu-icon {
-            width: 34px;
-            height: 34px;
-            border-radius: 10px;
+            width: 22px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: rgba(25, 135, 84, 0.10);
-            color: #198754;
-            font-size: .95rem;
-            font-weight: 700;
-            flex-shrink: 0;
+            font-size: 15px;
         }
 
         .submenu {
@@ -258,7 +253,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/dashboard.php') ?>" class="nav-link <?= isActiveMenu('dashboard', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">D</span>
+                            <span class="menu-icon"><i class="fa-solid fa-house"></i></span>
                             <span>Dashboard</span>
                         </span>
                     </a>
@@ -267,10 +262,10 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a class="nav-link <?= isActiveMenu('master', $activeMenu) ?>" data-bs-toggle="collapse" href="#submenuMasterDesktop" role="button" aria-expanded="true" aria-controls="submenuMasterDesktop">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">M</span>
+                            <span class="menu-icon"><i class="fa-solid fa-database"></i></span>
                             <span>Data Master</span>
                         </span>
-                        <span>▾</span>
+                        <i class="fa-solid fa-chevron-down small"></i>
                     </a>
 
                     <div class="collapse show submenu" id="submenuMasterDesktop">
@@ -300,7 +295,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/input_stok/index.php') ?>" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">I</span>
+                            <span class="menu-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
                             <span>Input Stok</span>
                         </span>
                     </a>
@@ -309,7 +304,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/profil/index.php') ?>" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">P</span>
+                            <span class="menu-icon"><i class="fa-solid fa-user"></i></span>
                             <span>Profil</span>
                         </span>
                     </a>
@@ -318,7 +313,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/logout.php') ?>" class="nav-link">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">L</span>
+                            <span class="menu-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                             <span>Logout</span>
                         </span>
                     </a>
@@ -343,7 +338,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/dashboard.php') ?>" class="nav-link <?= isActiveMenu('dashboard', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">D</span>
+                            <span class="menu-icon"><i class="fa-solid fa-house"></i></span>
                             <span>Dashboard</span>
                         </span>
                     </a>
@@ -352,10 +347,10 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a class="nav-link <?= isActiveMenu('master', $activeMenu) ?>" data-bs-toggle="collapse" href="#submenuMasterMobile" role="button" aria-expanded="true" aria-controls="submenuMasterMobile">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">M</span>
+                            <span class="menu-icon"><i class="fa-solid fa-database"></i></span>
                             <span>Data Master</span>
                         </span>
-                        <span>▾</span>
+                        <i class="fa-solid fa-chevron-down small"></i>
                     </a>
 
                     <div class="collapse show submenu" id="submenuMasterMobile">
@@ -385,7 +380,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/input_stok/index.php') ?>" class="nav-link <?= isActiveMenu('input_stok', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">I</span>
+                            <span class="menu-icon"><i class="fa-solid fa-boxes-stacked"></i></span>
                             <span>Input Stok</span>
                         </span>
                     </a>
@@ -394,7 +389,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/profil/index.php') ?>" class="nav-link <?= isActiveMenu('profil', $activeMenu) ?>">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">P</span>
+                            <span class="menu-icon"><i class="fa-solid fa-user"></i></span>
                             <span>Profil</span>
                         </span>
                     </a>
@@ -403,7 +398,7 @@ function isActiveSubmenu($submenu, $activeSubmenu) {
                 <li class="nav-item mb-1">
                     <a href="<?= base_url('page_upbs/logout.php') ?>" class="nav-link">
                         <span class="menu-label-wrap">
-                            <span class="menu-icon">L</span>
+                            <span class="menu-icon"><i class="fa-solid fa-right-from-bracket"></i></span>
                             <span>Logout</span>
                         </span>
                     </a>

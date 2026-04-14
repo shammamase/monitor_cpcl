@@ -8,7 +8,7 @@ $password = trim($_POST['password'] ?? '');
 
 if ($username === '' || $password === '') {
     $_SESSION['login_error_upbs'] = 'Username dan password wajib diisi.';
-    header('Location: ' . base_url('page_upbs/login.php'));
+    header('Location: ' . base_url('page_upbs/'));
     exit;
 }
 
@@ -36,13 +36,13 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$user) {
     $_SESSION['login_error_upbs'] = 'Akun tidak ditemukan atau tidak aktif.';
-    header('Location: ' . base_url('page_upbs/login.php'));
+    header('Location: ' . base_url('page_upbs/'));
     exit;
 }
 
 if (!password_verify($password, $user['password'])) {
     $_SESSION['login_error_upbs'] = 'Password salah.';
-    header('Location: ' . base_url('page_upbs/login.php'));
+    header('Location: ' . base_url('page_upbs/'));
     exit;
 }
 
