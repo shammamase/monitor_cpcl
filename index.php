@@ -296,6 +296,15 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
         <li class="nav-item me-2">
             <a class="nav-link active" href="<?= base_url('dashboard_v2.php') ?>">Rangking Per Provinsi</a>
         </li>
+        <li class="nav-item me-2">
+            <a class="nav-link active" href="<?= base_url('dashboard_perwilayah.php') ?>">Data Per Wilayah</a>
+        </li>
+        <li class="nav-item me-2">
+            <a class="nav-link active" href="<?= base_url('dashboard_sumber_bantuan.php') ?>">Rekap Sumber Bantuan</a>
+        </li>
+        <li class="nav-item me-2">
+            <a class="nav-link active" href="<?= base_url('dashboard_jenis_bantuan.php') ?>">Rekap Jenis Bantuan</a>
+        </li>
     </ul>
 
 
