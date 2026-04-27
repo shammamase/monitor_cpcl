@@ -35,6 +35,7 @@
     $poktanList = $stmtPoktanList->fetchAll();
     */
     $sumber = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY nama_sumber ASC")->fetchAll();
+    $satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
 
     $stmtJenis = $pdo->prepare("
         SELECT id_jenis_bantuan, nama_jenis_bantuan
@@ -152,6 +153,26 @@
                         <?php endforeach; ?>
                     </select>
                     <div class="form-text">Daftar jenis bantuan akan menyesuaikan sumber bantuan yang dipilih.</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Volume</label>
+                        <input type="number" name="volume" class="form-control" min="0.01" step="0.01" required
+                            value="<?= e($data['volume'] ?? '') ?>">
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Satuan</label>
+                        <select name="satuan" id="satuan" class="form-select select2" required>
+                            <option value="">-- Pilih Satuan --</option>
+                            <?php foreach ($satuanOptions as $satuan): ?>
+                                <option value="<?= e($satuan) ?>" <?= ($data['satuan'] ?? '') === $satuan ? 'selected' : '' ?>>
+                                    <?= e($satuan) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-check form-switch mb-3">

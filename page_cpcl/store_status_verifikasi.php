@@ -9,8 +9,11 @@ $id_sumber          = trim($_POST['id_sumber'] ?? '');
 $id_jenis_bantuan   = $_POST['id_jenis_bantuan'] ?? [];
 $status_verifikasi  = isset($_POST['status_verifikasi']) ? 1 : 0;
 $tanggal_submit     = trim($_POST['tanggal_submit'] ?? '');
+$volume             = trim($_POST['volume'] ?? '');
+$satuan             = trim($_POST['satuan'] ?? '');
 $keterangan_kendala = trim($_POST['keterangan_kendala'] ?? '');
 $keterangan_umum    = '';
+$satuanOptions      = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
 
 if ($provinsi_id <= 0) {
     die('Provinsi user tidak valid.');
@@ -22,6 +25,14 @@ if ($kabupaten_id === '' || $id_sumber === '') {
 
 if (!is_array($id_jenis_bantuan) || count($id_jenis_bantuan) === 0) {
     die('Jenis bantuan wajib dipilih minimal 1.');
+}
+
+if ($volume === '' || !is_numeric($volume) || (float)$volume <= 0) {
+    die('Volume wajib diisi dengan angka lebih dari 0.');
+}
+
+if ($satuan === '' || !in_array($satuan, $satuanOptions, true)) {
+    die('Satuan wajib dipilih.');
 }
 
 if ($status_verifikasi === 1) {
@@ -122,6 +133,8 @@ try {
                 id_sumber,
                 status_verifikasi,
                 tanggal_submit,
+                volume,
+                satuan,
                 is_active,
                 copied_from_id,
                 root_id,
@@ -137,6 +150,8 @@ try {
                 :id_sumber,
                 :status_verifikasi,
                 :tanggal_submit,
+                :volume,
+                :satuan,
                 1,
                 NULL,
                 NULL,
@@ -153,6 +168,8 @@ try {
         'id_sumber'          => $id_sumber,
         'status_verifikasi'  => $status_verifikasi,
         'tanggal_submit'     => $tanggal_submit,
+        'volume'             => $volume,
+        'satuan'             => $satuan,
         'keterangan_kendala' => $keterangan_kendala,
         'keterangan_umum'    => $keterangan_umum,
     ]);

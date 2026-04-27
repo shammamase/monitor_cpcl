@@ -4,6 +4,7 @@ require_once __DIR__ . '/../helpers/functions.php';
 
 $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fetchAll();
 $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY id_sumber ASC")->fetchAll();
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
 ?>
 <!doctype html>
 <html lang="id">
@@ -78,6 +79,23 @@ $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER
                     <select name="id_jenis_bantuan[]" id="id_jenis_bantuan" class="form-select select2-multiple" multiple required>
                     </select>
                     <div class="form-text">Pilih satu atau lebih jenis bantuan sesuai sumber bantuan yang dipilih.</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Volume</label>
+                        <input type="number" name="volume" class="form-control" min="0.01" step="0.01" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Satuan</label>
+                        <select name="satuan" id="satuan" class="form-select select2" required>
+                            <option value="">-- Pilih Satuan --</option>
+                            <?php foreach ($satuanOptions as $satuan): ?>
+                                <option value="<?= e($satuan) ?>"><?= e($satuan) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-check form-switch mb-3">

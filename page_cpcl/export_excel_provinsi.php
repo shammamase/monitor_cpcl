@@ -84,6 +84,8 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.volume,
+            sv.satuan,
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
@@ -103,6 +105,8 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.volume,
+            sv.satuan,
             sv.keterangan_kendala,
             sv.keterangan_umum,
             sv.created_at,
@@ -134,7 +138,7 @@ $sheet->setTitle('Status Verifikasi');
 | Judul
 |--------------------------------------------------------------------------
 */
-$sheet->mergeCells('A1:I1');
+$sheet->mergeCells('A1:K1');
 $sheet->setCellValue('A1', 'LAPORAN STATUS VERIFIKASI PROVINSI - ' . strtoupper($userLogin['nama_provinsi'] ?? ''));
 
 $sheet->getStyle('A1')->applyFromArray([
@@ -160,16 +164,18 @@ $headers = [
     'E3' => 'Status Submit Es.1',
     'F3' => 'Tanggal Submit',
     'G3' => 'Jenis Bantuan',
-    'H3' => 'Keterangan',
-    // 'I3' => 'Keterangan Umum',
-    'I3' => 'Waktu Input',
+    'H3' => 'Volume',
+    'I3' => 'Unit',
+    'J3' => 'Keterangan',
+    // 'K3' => 'Keterangan Umum',
+    'K3' => 'Waktu Input',
 ];
 
 foreach ($headers as $cell => $text) {
     $sheet->setCellValue($cell, $text);
 }
 
-$sheet->getStyle('A3:I3')->applyFromArray([
+$sheet->getStyle('A3:K3')->applyFromArray([
     'font' => [
         'bold' => true,
         'color' => ['rgb' => 'FFFFFF'],
@@ -200,6 +206,9 @@ $no = 1;
 foreach ($data as $row) {
     $statusText = ((int)$row['status_verifikasi'] === 1) ? 'Sudah' : 'Belum';
     $tanggalSubmit = !empty($row['tanggal_submit']) ? date('d-m-Y', strtotime($row['tanggal_submit'])) : '-';
+    $volume = $row['volume'] !== null && $row['volume'] !== ''
+        ? rtrim(rtrim(number_format((float)$row['volume'], 2, '.', ''), '0'), '.')
+        : '-';
     $waktuInput = !empty($row['created_at']) ? date('d-m-Y H:i', strtotime($row['created_at'])) : '-';
 
     $sheet->setCellValue('A' . $rowNumber, $no++);
@@ -209,9 +218,11 @@ foreach ($data as $row) {
     $sheet->setCellValue('E' . $rowNumber, $statusText);
     $sheet->setCellValue('F' . $rowNumber, $tanggalSubmit);
     $sheet->setCellValue('G' . $rowNumber, $row['jenis_bantuan'] ?: '-');
-    $sheet->setCellValue('H' . $rowNumber, $row['keterangan_kendala'] ?: '-');
-    //$sheet->setCellValue('I' . $rowNumber, $row['keterangan_umum'] ?: '-');
-    $sheet->setCellValue('I' . $rowNumber, $waktuInput);
+    $sheet->setCellValue('H' . $rowNumber, $volume);
+    $sheet->setCellValue('I' . $rowNumber, $row['satuan'] ?: '-');
+    $sheet->setCellValue('J' . $rowNumber, $row['keterangan_kendala'] ?: '-');
+    //$sheet->setCellValue('K' . $rowNumber, $row['keterangan_umum'] ?: '-');
+    $sheet->setCellValue('K' . $rowNumber, $waktuInput);
 
     $rowNumber++;
 }
@@ -224,7 +235,7 @@ foreach ($data as $row) {
 $lastRow = $rowNumber - 1;
 
 if ($lastRow >= 4) {
-    $sheet->getStyle("A4:I{$lastRow}")->applyFromArray([
+    $sheet->getStyle("A4:K{$lastRow}")->applyFromArray([
         'alignment' => [
             'vertical' => Alignment::VERTICAL_TOP,
             'wrapText' => true,
@@ -250,9 +261,11 @@ $widths = [
     'E' => 20,
     'F' => 15,
     'G' => 35,
-    'H' => 30,
-    'I' => 30,
-    // 'J' => 20,
+    'H' => 12,
+    'I' => 12,
+    'J' => 30,
+    'K' => 30,
+    // 'L' => 20,
 ];
 
 foreach ($widths as $col => $width) {

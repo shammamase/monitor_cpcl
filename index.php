@@ -131,6 +131,8 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.volume,
+            sv.satuan,
             sv.root_id,
             sv.keterangan_kendala,
             sv.keterangan_umum,
@@ -151,6 +153,8 @@ $sql = "SELECT
             sv.id_status_verif,
             sv.status_verifikasi,
             sv.tanggal_submit,
+            sv.volume,
+            sv.satuan,
             sv.root_id,
             sv.keterangan_kendala,
             sv.keterangan_umum,
@@ -423,6 +427,8 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
                             <th>Sumber Bantuan</th>
                             <th>Status Verifikasi</th>
                             <th>Jenis Bantuan</th>
+                            <th>Volume</th>
+                            <th>Unit</th>
                             <th>Keterangan</th>
                             <!--<th>Keterangan Umum</th>-->
                             <th>Waktu Input</th>
@@ -483,6 +489,10 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
                                             <span class="text-muted">-</span>
                                         <?php endif; ?>
                                     </td>
+                                    <td>
+                                        <?= $row['volume'] !== null && $row['volume'] !== '' ? e(rtrim(rtrim(number_format((float)$row['volume'], 2, '.', ''), '0'), '.')) : '<span class="text-muted">-</span>' ?>
+                                    </td>
+                                    <td><?= !empty($row['satuan']) ? e($row['satuan']) : '<span class="text-muted">-</span>' ?></td>
                                     <td><?= !empty($row['keterangan_kendala']) ? nl2br(e($row['keterangan_kendala'])) : '<span class="text-muted">-</span>' ?></td>
                                     <!--<td><?= !empty($row['keterangan_umum']) ? nl2br(e($row['keterangan_umum'])) : '<span class="text-muted">-</span>' ?></td>-->
                                     <td class="waktu-input">
@@ -496,7 +506,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="8" class="text-center text-muted">Belum ada data.</td>
+                                <td colspan="10" class="text-center text-muted">Belum ada data.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
