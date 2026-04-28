@@ -411,18 +411,6 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
                         Export Excel
                     </a>
                 </div>
-
-                <div class="col-md-auto">
-                    <a href="<?= base_url('status_verifikasi/export_template_volume.php') ?>" class="btn btn-outline-success">
-                        Template Volume
-                    </a>
-                </div>
-
-                <div class="col-md-auto">
-                    <a href="<?= base_url('status_verifikasi/import_volume.php') ?>" class="btn btn-outline-primary">
-                        Import Volume
-                    </a>
-                </div>
             </form>
 
             <div class="mb-3 text-muted">
