@@ -485,7 +485,7 @@ function buildPageUrl($page, $kabupaten_id, $id_sumber, $status_filter, $id_jeni
                                         <?php endif; ?>
                                     </td>
                                     <td>
-                                        <?= $row['volume'] !== null && $row['volume'] !== '' ? e(rtrim(rtrim(number_format((float)$row['volume'], 2, '.', ''), '0'), '.')) : '<span class="text-muted">-</span>' ?>
+                                        <?= $row['volume'] !== null && $row['volume'] !== '' ? e(rtrim(rtrim(number_format((float)$row['volume'], 2, ',', '.'), '0'), ',')) : '<span class="text-muted">-</span>' ?>
                                     </td>
                                     <td><?= !empty($row['satuan']) ? e($row['satuan']) : '<span class="text-muted">-</span>' ?></td>
                                     <td><?= !empty($row['keterangan_kendala']) ? nl2br(e($row['keterangan_kendala'])) : '<span class="text-muted">-</span>' ?></td>

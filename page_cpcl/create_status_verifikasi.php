@@ -114,7 +114,7 @@ $satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor',
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Volume</label>
-                        <input type="number" name="volume" class="form-control" min="0.01" step="0.01" required>
+                        <input type="text" name="volume" class="form-control volume-input" inputmode="decimal" required>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -165,6 +165,21 @@ $(document).ready(function() {
     $('.select2-multiple').select2({
         width: '100%',
         placeholder: '-- Pilih Jenis Bantuan --'
+    });
+
+    function formatVolumeInput(value) {
+        let cleaned = value.replace(/[^\d,]/g, '');
+        let parts = cleaned.split(',');
+        let integerPart = parts[0].replace(/^0+(?=\d)/, '');
+        let decimalPart = parts.length > 1 ? ',' + parts.slice(1).join('').replace(/\D/g, '') : '';
+
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+        return integerPart + decimalPart;
+    }
+
+    $('.volume-input').on('keyup', function() {
+        $(this).val(formatVolumeInput($(this).val()));
     });
 
     function toggleStatusVerifikasiFields() {

@@ -11,6 +11,7 @@ $id_jenis_bantuan    = $_POST['id_jenis_bantuan'] ?? [];
 $status_verifikasi    = isset($_POST['status_verifikasi']) ? 1 : 0;
 $tanggal_submit      = trim($_POST['tanggal_submit'] ?? '');
 $volume              = trim($_POST['volume'] ?? '');
+$volume              = str_replace(',', '.', str_replace('.', '', $volume));
 $satuan              = trim($_POST['satuan'] ?? '');
 $keterangan_kendala   = trim($_POST['keterangan_kendala'] ?? '');
 $keterangan_umum      = trim($_POST['keterangan_umum'] ?? '');
