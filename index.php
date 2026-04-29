@@ -293,21 +293,27 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
         <h3 class="mb-1">Sistem Pemantauan CPCL</h3>
         <p class="mb-0">Pemantauan internal BRMP untuk data Poktan dan Status Verifikasi.</p>
     </div>
-    <ul class="nav nav-pills mb-4">
-        <li class="nav-item me-2">
+    <ul class="nav nav-pills mb-4 gap-2">
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard.php') ?>">Dashboard Rekap Provinsi</a>
         </li>
-        <li class="nav-item me-2">
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard_v2.php') ?>">Rangking Per Provinsi</a>
         </li>
-        <li class="nav-item me-2">
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard_perwilayah.php') ?>">Data Per Wilayah</a>
         </li>
-        <li class="nav-item me-2">
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard_sumber_bantuan.php') ?>">Rekap Sumber Bantuan</a>
         </li>
-        <li class="nav-item me-2">
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard_jenis_bantuan.php') ?>">Rekap Jenis Bantuan</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="<?= base_url('dashboard_volume_provinsi_jenis.php') ?>">Volume per Provinsi</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="<?= base_url('dashboard_volume_jenis_bantuan.php') ?>">Volume per Jenis</a>
         </li>
     </ul>
 
