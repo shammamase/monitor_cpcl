@@ -48,7 +48,7 @@ $stmtSelectedJenis = $pdo->prepare("
 $stmtSelectedJenis->execute([$data['id_status_verif']]);
 $selectedJenisBantuan = $stmtSelectedJenis->fetchAll(PDO::FETCH_COLUMN);
 
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
 ?>
 <!doctype html>
 <html lang="id">

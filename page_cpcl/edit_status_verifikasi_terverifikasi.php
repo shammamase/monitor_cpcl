@@ -16,31 +16,14 @@ $stmt = $pdo->prepare("
     WHERE id_status_verif = ?
       AND is_active = 1
       AND provinsi_id = ?
+      AND status_verifikasi = 1
     LIMIT 1
 ");
 $stmt->execute([$id, $provinsi_id_user]);
 $data = $stmt->fetch();
 
 if (!$data) {
-    die('Data tidak ditemukan atau tidak termasuk provinsi Anda.');
-}
-
-/*
-|--------------------------------------------------------------------------
-| Guard: jika dalam satu root sudah ada status 1, tidak boleh update lagi
-|--------------------------------------------------------------------------
-*/
-$stmtGuard = $pdo->prepare("
-    SELECT COUNT(*) AS total
-    FROM status_verifikasi
-    WHERE root_id = ?
-      AND status_verifikasi = 1
-");
-$stmtGuard->execute([(int)$data['root_id']]);
-$guard = $stmtGuard->fetch();
-
-if ((int)$guard['total'] > 0) {
-    die('Data ini sudah final dan tidak dapat diperbarui lagi.');
+    die('Data sudah verifikasi tidak ditemukan atau tidak termasuk provinsi Anda.');
 }
 
 $stmtKab = $pdo->prepare("
@@ -81,7 +64,7 @@ $selectedJenisBantuan = $stmtSelectedJenis->fetchAll(PDO::FETCH_COLUMN);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Status Verifikasi - Dashboard Provinsi</title>
+    <title>Edit Status Verifikasi - Dashboard Provinsi</title>
 
     <link rel="icon" type="image/png" href="<?= base_url('assets/img/logo.png') ?>">
     <link rel="shortcut icon" href="<?= base_url('assets/img/favicon.ico') ?>">
@@ -125,14 +108,14 @@ $selectedJenisBantuan = $stmtSelectedJenis->fetchAll(PDO::FETCH_COLUMN);
 
 <div class="container py-4">
     <div class="alert alert-info">
-        Data yang disimpan akan menjadi versi baru. Data sebelumnya tetap tersimpan sebagai riwayat.
+        Perubahan pada halaman ini akan memperbarui data yang sama, bukan membuat versi data baru.
     </div>
 
     <div class="card">
         <div class="card-body">
-            <h4 class="mb-4">Update Status Verifikasi</h4>
+            <h4 class="mb-4">Edit Status Verifikasi</h4>
 
-            <form action="<?= base_url('page_cpcl/update_status_verifikasi.php') ?>" method="POST">
+            <form action="<?= base_url('page_cpcl/update_status_verifikasi_terverifikasi.php') ?>" method="POST">
                 <input type="hidden" name="id_status_verif" value="<?= $data['id_status_verif'] ?>">
 
                 <div class="mb-3">
@@ -197,18 +180,18 @@ $selectedJenisBantuan = $stmtSelectedJenis->fetchAll(PDO::FETCH_COLUMN);
                 </div>
 
                 <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="status_verifikasi" name="status_verifikasi" value="1" <?= (int)$data['status_verifikasi'] === 1 ? 'checked' : '' ?>>
+                    <input class="form-check-input" type="checkbox" id="status_verifikasi" name="status_verifikasi" value="1" checked>
                     <label class="form-check-label" for="status_verifikasi">Status Verifikasi Sudah</label>
                     <div class="form-text">Jika tidak dicentang, status otomatis tersimpan sebagai <b>Belum</b>.</div>
                 </div>
 
-                <div class="mb-3 <?= (int)$data['status_verifikasi'] === 1 ? '' : 'd-none' ?>" id="tanggal_submit_wrapper">
+                <div class="mb-3" id="tanggal_submit_wrapper">
                     <label class="form-label">Tanggal Submit</label>
                     <input type="date" name="tanggal_submit" id="tanggal_submit" class="form-control"
                            value="<?= !empty($data['tanggal_submit']) ? date('Y-m-d', strtotime($data['tanggal_submit'])) : '' ?>">
                 </div>
 
-                <div class="mb-3 <?= (int)$data['status_verifikasi'] === 1 ? 'd-none' : '' ?>" id="keterangan_kendala_wrapper">
+                <div class="mb-3 d-none" id="keterangan_kendala_wrapper">
                     <label class="form-label">Keterangan Kendala</label>
                     <textarea name="keterangan_kendala" id="keterangan_kendala" class="form-control" rows="3"><?= e($data['keterangan_kendala']) ?></textarea>
                 </div>

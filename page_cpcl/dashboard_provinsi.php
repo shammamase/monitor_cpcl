@@ -452,7 +452,8 @@ function buildPageUrl($page, $kabupaten_id, $id_sumber, $status_filter, $id_jeni
                                     }
 
                                     $rootId = (int)($row['root_id'] ?? 0);
-                                    $hideUpdate = $rootId > 0 && isset($finalizedRoots[$rootId]);
+                                    $isVerified = (int)$row['status_verifikasi'] === 1;
+                                    $hideUpdate = !$isVerified && $rootId > 0 && isset($finalizedRoots[$rootId]);
                                 ?>
                                 <tr>
                                     <td><?= $offset + $i + 1 ?></td>
@@ -499,7 +500,12 @@ function buildPageUrl($page, $kabupaten_id, $id_sumber, $status_filter, $id_jeni
                                     <td>
                                         <div class="d-flex flex-wrap gap-1">
                                             <?php if (!$hideUpdate): ?>
-                                                <a href="<?= base_url('page_cpcl/edit_status_verifikasi.php?id=' . $row['id_status_verif']) ?>" class="btn btn-sm btn-warning">Update</a>
+                                                <?php
+                                                    $editUrl = $isVerified
+                                                        ? base_url('page_cpcl/edit_status_verifikasi_terverifikasi.php?id=' . $row['id_status_verif'])
+                                                        : base_url('page_cpcl/edit_status_verifikasi.php?id=' . $row['id_status_verif']);
+                                                ?>
+                                                <a href="<?= $editUrl ?>" class="btn btn-sm btn-warning"><?= $isVerified ? 'Edit' : 'Update' ?></a>
                                             <?php endif; ?>
 
                                             <a href="<?= base_url('page_cpcl/delete_status_verifikasi.php?id=' . $row['id_status_verif']) ?>"

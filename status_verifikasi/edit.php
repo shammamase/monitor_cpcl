@@ -35,7 +35,7 @@
     $poktanList = $stmtPoktanList->fetchAll();
     */
     $sumber = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY nama_sumber ASC")->fetchAll();
-    $satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
+    $satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
 
     $stmtJenis = $pdo->prepare("
         SELECT id_jenis_bantuan, nama_jenis_bantuan

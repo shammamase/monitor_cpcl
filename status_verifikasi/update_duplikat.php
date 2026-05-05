@@ -43,7 +43,7 @@ $keteranganKendala = trim($_POST['keterangan_kendala'] ?? '');
 $keteranganUmum = trim($_POST['keterangan_umum'] ?? '');
 $redirect = $_POST['redirect'] ?? base_url('status_verifikasi/cek_duplikat.php');
 $basePath = base_url();
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
 
 if (!is_string($redirect) || strpos($redirect, $basePath) !== 0) {
     $redirect = base_url('status_verifikasi/cek_duplikat.php');

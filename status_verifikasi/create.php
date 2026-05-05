@@ -4,7 +4,7 @@ require_once __DIR__ . '/../helpers/functions.php';
 
 $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fetchAll();
 $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY id_sumber ASC")->fetchAll();
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
 ?>
 <!doctype html>
 <html lang="id">

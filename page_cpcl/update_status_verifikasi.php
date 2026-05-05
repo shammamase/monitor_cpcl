@@ -15,7 +15,7 @@ $volume              = str_replace(',', '.', str_replace('.', '', $volume));
 $satuan              = trim($_POST['satuan'] ?? '');
 $keterangan_kendala  = trim($_POST['keterangan_kendala'] ?? '');
 $keterangan_umum     = '';
-$satuanOptions       = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2'];
+$satuanOptions       = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
 
 if ($provinsi_id_user <= 0) {
     die('Provinsi user tidak valid.');
