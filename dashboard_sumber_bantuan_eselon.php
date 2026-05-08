@@ -2,6 +2,28 @@
 require_once __DIR__ . '/config/database.php';
 require_once __DIR__ . '/helpers/functions.php';
 
+$eselonList = [
+    'Dirjen Hortikultura',
+    'Dirjen PSP',
+    'Dirjen Tanaman Pangan',
+    'Dirjen LIP',
+    'Dirjen Perkebunan',
+    'Dirjen PKH',
+];
+
+$rekap = [];
+
+foreach ($eselonList as $eselon) {
+    $rekap[$eselon] = [
+        'nama_eselon' => $eselon,
+        'total_sumber' => 0,
+        'total_input' => 0,
+        'total_sudah' => 0,
+        'total_belum' => 0,
+        'persen_sudah' => 0,
+    ];
+}
+
 $sql = "
     SELECT
         sb.id_sumber,
@@ -39,22 +61,34 @@ $sql = "
         ON sv.id_sumber = sb.id_sumber
        AND sv.is_active = 1
     GROUP BY sb.id_sumber, sb.nama_sumber
-    ORDER BY total_sudah DESC, total_belum DESC, sb.nama_sumber ASC
+    ORDER BY sb.nama_sumber ASC
 ";
 
 $stmt = $pdo->query($sql);
-$data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$sumberRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$totalSumber = count($data);
+foreach ($sumberRows as $row) {
+    foreach ($eselonList as $eselon) {
+        $suffix = ' - ' . $eselon;
+
+        if (substr($row['nama_sumber'], -strlen($suffix)) === $suffix) {
+            $rekap[$eselon]['total_sumber']++;
+            $rekap[$eselon]['total_input'] += (int)$row['total_input'];
+            $rekap[$eselon]['total_sudah'] += (int)$row['total_sudah'];
+            $rekap[$eselon]['total_belum'] += (int)$row['total_belum'];
+            break;
+        }
+    }
+}
+
+$totalEselon = count($rekap);
+$totalSumber = 0;
 $totalInput = 0;
 $totalSudah = 0;
 $totalBelum = 0;
 
-foreach ($data as &$row) {
-    $row['total_input'] = (int)$row['total_input'];
-    $row['total_sudah'] = (int)$row['total_sudah'];
-    $row['total_belum'] = (int)$row['total_belum'];
-
+foreach ($rekap as &$row) {
+    $totalSumber += $row['total_sumber'];
     $totalInput += $row['total_input'];
     $totalSudah += $row['total_sudah'];
     $totalBelum += $row['total_belum'];
@@ -64,13 +98,25 @@ foreach ($data as &$row) {
         : 0;
 }
 unset($row);
+
+uasort($rekap, function ($a, $b) {
+    if ($a['total_sudah'] !== $b['total_sudah']) {
+        return $b['total_sudah'] <=> $a['total_sudah'];
+    }
+
+    if ($a['total_belum'] !== $b['total_belum']) {
+        return $b['total_belum'] <=> $a['total_belum'];
+    }
+
+    return strcmp($a['nama_eselon'], $b['nama_eselon']);
+});
 ?>
 <!doctype html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rekap Sumber Bantuan - Monitoring CPCL</title>
+    <title>Rekap Sumber Bantuan Eselon 1 - Monitoring CPCL</title>
 
     <link rel="icon" href="<?= base_url('assets/img/logo.png') ?>" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -111,13 +157,13 @@ unset($row);
             vertical-align: middle;
         }
 
-        .sumber-link {
+        .eselon-link {
             color: #146c43;
             font-weight: 600;
             text-decoration: none;
         }
 
-        .sumber-link:hover {
+        .eselon-link:hover {
             color: #0f5132;
             text-decoration: underline;
         }
@@ -176,14 +222,13 @@ unset($row);
 <div class="container py-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
-            <h3 class="section-title mb-1">Rekap Berdasarkan Sumber Bantuan</h3>
-            <p class="text-muted mb-0">Daftar jumlah usulan CPCL yang sudah submit dan belum submit per sumber bantuan.</p>
+            <h3 class="section-title mb-1">Rekap Sumber Bantuan Berdasarkan Eselon 1</h3>
+            <p class="text-muted mb-0">Ringkasan jumlah sumber bantuan dan status submit CPCL per Eselon 1.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <a href="<?= base_url('index.php') ?>" class="btn btn-outline-secondary">Data Status Verifikasi</a>
-            <a href="<?= base_url('dashboard_sumber_bantuan_eselon.php') ?>" class="btn btn-outline-success">Rekap Sumber Bantuan Es.1</a>
+            <a href="<?= base_url('dashboard_sumber_bantuan.php') ?>" class="btn btn-outline-success">Rekap Sumber Bantuan</a>
             <a href="<?= base_url('dashboard_jenis_bantuan.php') ?>" class="btn btn-outline-success">Rekap Jenis Bantuan</a>
-            <a href="<?= base_url('dashboard_perwilayah.php') ?>" class="btn btn-outline-success">Rangking Per Wilayah</a>
         </div>
     </div>
 
@@ -191,16 +236,16 @@ unset($row);
         <div class="col-md-3">
             <div class="card summary-card h-100" style="background: linear-gradient(135deg, #198754, #157347);">
                 <div class="card-body">
-                    <div class="label">Total Sumber Bantuan</div>
-                    <div class="value"><?= number_format($totalSumber) ?></div>
+                    <div class="label">Total Eselon 1</div>
+                    <div class="value"><?= number_format($totalEselon) ?></div>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
             <div class="card summary-card h-100" style="background: linear-gradient(135deg, #0d6efd, #0b5ed7);">
                 <div class="card-body">
-                    <div class="label">Total Data</div>
-                    <div class="value"><?= number_format($totalInput) ?></div>
+                    <div class="label">Total Sumber</div>
+                    <div class="value"><?= number_format($totalSumber) ?></div>
                 </div>
             </div>
         </div>
@@ -229,7 +274,8 @@ unset($row);
                     <thead class="table-light">
                         <tr>
                             <th width="70">No</th>
-                            <th>Sumber Bantuan</th>
+                            <th>Eselon 1</th>
+                            <th width="130">Jumlah Sumber</th>
                             <th width="130">Total Data</th>
                             <th width="140">Sudah Submit</th>
                             <th width="120">Belum</th>
@@ -237,28 +283,30 @@ unset($row);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php if ($data): ?>
-                            <?php foreach ($data as $i => $row): ?>
+                        <?php if ($rekap): ?>
+                            <?php $no = 1; ?>
+                            <?php foreach ($rekap as $row): ?>
                                 <?php
                                     $totalUrl = base_url('index.php?' . http_build_query([
-                                        'id_sumber' => $row['id_sumber'],
+                                        'eselon_1' => $row['nama_eselon'],
                                     ]));
                                     $sudahUrl = base_url('index.php?' . http_build_query([
-                                        'id_sumber' => $row['id_sumber'],
+                                        'eselon_1' => $row['nama_eselon'],
                                         'status_filter' => '1',
                                     ]));
                                     $belumUrl = base_url('index.php?' . http_build_query([
-                                        'id_sumber' => $row['id_sumber'],
+                                        'eselon_1' => $row['nama_eselon'],
                                         'status_filter' => '0',
                                     ]));
                                 ?>
                                 <tr>
-                                    <td><?= $i + 1 ?></td>
+                                    <td><?= $no++ ?></td>
                                     <td>
-                                        <a href="<?= $totalUrl ?>" class="sumber-link">
-                                            <?= e($row['nama_sumber']) ?>
+                                        <a href="<?= $totalUrl ?>" class="eselon-link">
+                                            <?= e($row['nama_eselon']) ?>
                                         </a>
                                     </td>
+                                    <td><?= number_format($row['total_sumber']) ?></td>
                                     <td>
                                         <a href="<?= $totalUrl ?>" class="badge badge-soft-primary text-decoration-none">
                                             <?= number_format($row['total_input']) ?>
@@ -296,13 +344,14 @@ unset($row);
                             <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="6" class="text-center text-muted">Belum ada data sumber bantuan.</td>
+                                <td colspan="7" class="text-center text-muted">Belum ada data Eselon 1.</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>
                     <tfoot class="table-light">
                         <tr>
                             <th colspan="2">Total</th>
+                            <th><?= number_format($totalSumber) ?></th>
                             <th><?= number_format($totalInput) ?></th>
                             <th><?= number_format($totalSudah) ?></th>
                             <th><?= number_format($totalBelum) ?></th>

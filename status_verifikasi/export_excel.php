@@ -12,11 +12,24 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $keyword        = trim($_GET['keyword_sv'] ?? '');
 $provinsi_id    = trim($_GET['provinsi_id'] ?? '');
 $kabupaten_id   = trim($_GET['kabupaten_id'] ?? '');
+$eselon_1       = trim($_GET['eselon_1'] ?? '');
 $id_sumber      = trim($_GET['id_sumber'] ?? '');
 $status_filter  = trim($_GET['status_filter'] ?? '');
 $id_jenis       = trim($_GET['id_jenis_bantuan'] ?? '');
 $tanggal_dari   = trim($_GET['tanggal_dari'] ?? '');
 $tanggal_sampai = trim($_GET['tanggal_sampai'] ?? '');
+$eselonList = [
+    'Dirjen Hortikultura',
+    'Dirjen PSP',
+    'Dirjen Tanaman Pangan',
+    'Dirjen LIP',
+    'Dirjen Perkebunan',
+    'Dirjen PKH',
+];
+
+if ($eselon_1 !== '' && !in_array($eselon_1, $eselonList, true)) {
+    $eselon_1 = '';
+}
 
 /*
 |--------------------------------------------------------------------------
@@ -40,6 +53,11 @@ if ($provinsi_id !== '') {
 if ($kabupaten_id !== '') {
     $where[] = "sv.kabupaten_id = :kabupaten_id";
     $params['kabupaten_id'] = $kabupaten_id;
+}
+
+if ($eselon_1 !== '') {
+    $where[] = "sb.nama_sumber LIKE :eselon_1";
+    $params['eselon_1'] = "% - {$eselon_1}";
 }
 
 if ($id_sumber !== '') {
