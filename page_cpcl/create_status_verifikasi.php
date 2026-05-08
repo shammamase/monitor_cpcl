@@ -23,7 +23,7 @@ $sumberList = $pdo->query("
     FROM sumber_bantuan
     ORDER BY nama_sumber ASC
 ")->fetchAll();
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
 ?>
 <!doctype html>
 <html lang="id">

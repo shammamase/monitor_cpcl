@@ -14,7 +14,7 @@ $volume              = trim($_POST['volume'] ?? '');
 $volume              = str_replace(',', '.', str_replace('.', '', $volume));
 $satuan              = trim($_POST['satuan'] ?? '');
 $keterangan_kendala  = trim($_POST['keterangan_kendala'] ?? '');
-$satuanOptions       = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
+$satuanOptions       = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
 
 if ($provinsi_id_user <= 0) {
     die('Provinsi user tidak valid.');
@@ -44,7 +44,6 @@ if ($status_verifikasi === 1) {
     if ($tanggal_submit === '') {
         die('Tanggal submit wajib diisi jika status verifikasi sudah.');
     }
-    $keterangan_kendala = null;
 } else {
     $tanggal_submit = null;
 }

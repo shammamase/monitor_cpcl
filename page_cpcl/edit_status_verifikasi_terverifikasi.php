@@ -40,7 +40,7 @@ $sumberList = $pdo->query("
     FROM sumber_bantuan
     ORDER BY nama_sumber ASC
 ")->fetchAll();
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat'];
+$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
 
 $stmtJenis = $pdo->prepare("
     SELECT id_jenis_bantuan, nama_jenis_bantuan
@@ -191,9 +191,10 @@ $selectedJenisBantuan = $stmtSelectedJenis->fetchAll(PDO::FETCH_COLUMN);
                            value="<?= !empty($data['tanggal_submit']) ? date('Y-m-d', strtotime($data['tanggal_submit'])) : '' ?>">
                 </div>
 
-                <div class="mb-3 d-none" id="keterangan_kendala_wrapper">
-                    <label class="form-label">Keterangan Kendala</label>
-                    <textarea name="keterangan_kendala" id="keterangan_kendala" class="form-control" rows="3"><?= e($data['keterangan_kendala']) ?></textarea>
+                <div class="mb-3" id="keterangan_kendala_wrapper">
+                    <label class="form-label" id="keterangan_kendala_label">Keterangan</label>
+                    <textarea name="keterangan_kendala" id="keterangan_kendala" class="form-control" rows="3"
+                              placeholder="Isi keterangan bila diperlukan"><?= e($data['keterangan_kendala']) ?></textarea>
                 </div>
 
                 <div class="d-flex gap-2">
@@ -237,11 +238,12 @@ $(document).ready(function() {
     function toggleStatusVerifikasiFields() {
         if ($('#status_verifikasi').is(':checked')) {
             $('#tanggal_submit_wrapper').removeClass('d-none');
-            $('#keterangan_kendala_wrapper').addClass('d-none');
-            $('#keterangan_kendala').val('');
+            $('#keterangan_kendala_label').text('Keterangan');
+            $('#keterangan_kendala').attr('placeholder', 'Isi keterangan bila diperlukan');
         } else {
             $('#tanggal_submit_wrapper').addClass('d-none');
-            $('#keterangan_kendala_wrapper').removeClass('d-none');
+            $('#keterangan_kendala_label').text('Keterangan Kendala');
+            $('#keterangan_kendala').attr('placeholder', 'Isi kendala verifikasi');
             $('#tanggal_submit').val('');
         }
     }
