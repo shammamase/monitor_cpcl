@@ -397,7 +397,7 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $id_sumber, 
                         <th>Status Verifikasi</th>
                         <th>Jenis Bantuan</th>
                         <th>Volume</th>
-                        <th>Unit</th>
+                        <th>Satuan</th>
                         <th>Keterangan</th>
                         <!--<th>Keterangan Umum</th>-->
                         <th>Waktu Input</th>

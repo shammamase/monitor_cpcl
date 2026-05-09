@@ -7,7 +7,7 @@ $satuan   = trim($_GET['satuan'] ?? '');
 $status   = array_key_exists('status_verifikasi', $_GET) ? trim($_GET['status_verifikasi']) : '1';
 
 if ($id_jenis === '' || $satuan === '') {
-    die('Jenis bantuan dan unit wajib dipilih.');
+    die('Jenis bantuan dan satuan wajib dipilih.');
 }
 
 $stmtJenis = $pdo->prepare("
@@ -173,7 +173,7 @@ function format_volume($value)
             <p class="text-muted mb-0">
                 <?= e($jenis['nama_jenis_bantuan']) ?>
                 <?= !empty($jenis['nama_sumber']) ? ' - ' . e($jenis['nama_sumber']) : '' ?>
-                | Unit: <?= e($satuan) ?>
+                | Satuan: <?= e($satuan) ?>
             </p>
         </div>
         <div class="d-flex flex-wrap gap-2">
@@ -220,13 +220,13 @@ function format_volume($value)
                             <th>Kabupaten/Kota</th>
                             <th class="text-end">Jumlah Data</th>
                             <th class="text-end">Total Volume</th>
-                            <th>Unit</th>
+                            <th>Satuan</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php if (empty($data)): ?>
                             <tr>
-                                <td colspan="6" class="text-center text-muted py-4">Belum ada daerah yang mengisi volume dan unit ini.</td>
+                                <td colspan="6" class="text-center text-muted py-4">Belum ada daerah yang mengisi volume dan satuan ini.</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($data as $index => $row): ?>

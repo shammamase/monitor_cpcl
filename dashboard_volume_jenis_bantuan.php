@@ -182,7 +182,7 @@ function format_volume($value)
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-2">
         <div>
             <h3 class="section-title mb-1">Total Volume per Jenis Bantuan</h3>
-            <p class="text-muted mb-0">Rekap total volume dan unit yang sudah terinput pada setiap jenis bantuan.</p>
+            <p class="text-muted mb-0">Rekap total volume dan satuan yang sudah terinput pada setiap jenis bantuan.</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
             <a href="<?= base_url('index.php') ?>" class="btn btn-outline-secondary">Data Status Verifikasi</a>
@@ -248,7 +248,7 @@ function format_volume($value)
                             <th>Sumber Bantuan</th>
                             <th class="text-end">Jumlah Data</th>
                             <th class="text-end">Total Volume</th>
-                            <th>Unit</th>
+                            <th>Satuan</th>
                         </tr>
                     </thead>
                     <tbody>

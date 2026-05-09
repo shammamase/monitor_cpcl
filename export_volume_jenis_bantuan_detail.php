@@ -14,7 +14,7 @@ $satuan   = trim($_GET['satuan'] ?? '');
 $status   = array_key_exists('status_verifikasi', $_GET) ? trim($_GET['status_verifikasi']) : '1';
 
 if ($id_jenis === '' || $satuan === '') {
-    die('Jenis bantuan dan unit wajib dipilih.');
+    die('Jenis bantuan dan satuan wajib dipilih.');
 }
 
 $stmtJenis = $pdo->prepare("
@@ -80,7 +80,7 @@ $sheet->setTitle('Detail Daerah');
 $sheet->mergeCells('A1:F1');
 $sheet->setCellValue('A1', 'DETAIL DAERAH PENGISI VOLUME');
 $sheet->mergeCells('A2:F2');
-$sheet->setCellValue('A2', ($jenis['nama_jenis_bantuan'] ?: '-') . ' | Unit: ' . $satuan);
+$sheet->setCellValue('A2', ($jenis['nama_jenis_bantuan'] ?: '-') . ' | Satuan: ' . $satuan);
 $sheet->getStyle('A1:A2')->applyFromArray([
     'font' => ['bold' => true],
     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
@@ -93,7 +93,7 @@ $headers = [
     'C4' => 'Kabupaten/Kota',
     'D4' => 'Jumlah Data',
     'E4' => 'Total Volume',
-    'F4' => 'Unit',
+    'F4' => 'Satuan',
 ];
 
 foreach ($headers as $cell => $text) {

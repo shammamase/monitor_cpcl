@@ -436,7 +436,7 @@ function buildPageUrl($page, $kabupaten_id, $id_sumber, $status_filter, $id_jeni
                             <th>Status Verifikasi</th>
                             <th>Jenis Bantuan</th>
                             <th>Volume</th>
-                            <th>Unit</th>
+                            <th>Satuan</th>
                             <th>Keterangan</th>
                             <th>Waktu Input</th>
                             <th width="180">Aksi</th>

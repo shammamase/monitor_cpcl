@@ -44,7 +44,7 @@ $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle('Template Volume');
 
 $sheet->mergeCells('A1:G1');
-$sheet->setCellValue('A1', 'TEMPLATE UPDATE VOLUME DAN UNIT STATUS VERIFIKASI');
+$sheet->setCellValue('A1', 'TEMPLATE UPDATE VOLUME DAN SATUAN STATUS VERIFIKASI');
 $sheet->getStyle('A1')->applyFromArray([
     'font' => [
         'bold' => true,
@@ -55,7 +55,7 @@ $sheet->getStyle('A1')->applyFromArray([
     ],
 ]);
 
-$sheet->setCellValue('A2', 'Isi hanya kolom volume dan unit. Jangan ubah id_status_verif.');
+$sheet->setCellValue('A2', 'Isi hanya kolom volume dan satuan. Jangan ubah id_status_verif.');
 $sheet->mergeCells('A2:G2');
 
 $headers = [
@@ -65,7 +65,7 @@ $headers = [
     'D4' => 'sumber_bantuan',
     'E4' => 'jenis_bantuan',
     'F4' => 'volume',
-    'G4' => 'unit',
+    'G4' => 'satuan',
 ];
 
 foreach ($headers as $cell => $text) {

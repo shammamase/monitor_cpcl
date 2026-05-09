@@ -277,7 +277,7 @@ $currentUrl = $_SERVER['REQUEST_URI'] ?? base_url('status_verifikasi/cek_duplika
                             <th>Status Verifikasi</th>
                             <th>Jenis Bantuan</th>
                             <th>Volume</th>
-                            <th>Unit</th>
+                            <th>Satuan</th>
                             <th>Keterangan</th>
                             <th>Waktu Input</th>
                             <th width="150">Aksi</th>

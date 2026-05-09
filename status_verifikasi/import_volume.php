@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     } elseif ((int)$dbRow['status_verifikasi'] !== 1) {
                         $rowErrors[] = 'Status verifikasi bukan Sudah.';
                     } elseif ($dbRow['volume'] !== null && $dbRow['satuan'] !== null && trim((string)$dbRow['satuan']) !== '') {
-                        $rowErrors[] = 'Volume dan unit sudah terisi, tidak akan dioverwrite.';
+                        $rowErrors[] = 'Volume dan satuan sudah terisi, tidak akan dioverwrite.';
                     }
                 }
 
@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 if ($satuan === '') {
-                    $rowErrors[] = 'Unit wajib diisi.';
+                    $rowErrors[] = 'Satuan wajib diisi.';
                 }
 
                 $status = empty($rowErrors) ? 'valid' : 'error';
@@ -151,7 +151,7 @@ $payload = $validRows ? base64_encode(json_encode($validRows)) : '';
 <div class="container py-4">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 mb-3">
         <div>
-            <h4 class="mb-1">Import Volume dan Unit</h4>
+            <h4 class="mb-1">Import Volume dan Satuan</h4>
             <div class="text-muted">Update data lama berdasarkan id_status_verif dari file Excel.</div>
         </div>
         <div class="d-flex gap-2">
@@ -174,7 +174,7 @@ $payload = $validRows ? base64_encode(json_encode($validRows)) : '';
                 <div class="col-md-8">
                     <label class="form-label">File Excel</label>
                     <input type="file" name="file_excel" class="form-control" accept=".xlsx,.xls" required>
-                    <div class="form-text">Gunakan template dari sistem. Kolom yang diedit cukup volume dan unit.</div>
+                    <div class="form-text">Gunakan template dari sistem. Kolom yang diedit cukup volume dan satuan.</div>
                 </div>
                 <div class="col-md-auto">
                     <button type="submit" class="btn btn-primary">Preview Import</button>
@@ -199,7 +199,7 @@ $payload = $validRows ? base64_encode(json_encode($validRows)) : '';
                     <?php if ($validRows): ?>
                         <form method="POST" action="<?= base_url('status_verifikasi/process_import_volume.php') ?>">
                             <input type="hidden" name="payload" value="<?= e($payload) ?>">
-                            <button type="submit" class="btn btn-success" onclick="return confirm('Proses update volume dan unit untuk data valid?')">Proses Update</button>
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Proses update volume dan satuan untuk data valid?')">Proses Update</button>
                         </form>
                     <?php endif; ?>
                 </div>
@@ -214,7 +214,7 @@ $payload = $validRows ? base64_encode(json_encode($validRows)) : '';
                                 <th>Kabupaten</th>
                                 <th>Sumber Bantuan</th>
                                 <th>Volume</th>
-                                <th>Unit</th>
+                                <th>Satuan</th>
                                 <th>Status</th>
                                 <th>Keterangan</th>
                             </tr>

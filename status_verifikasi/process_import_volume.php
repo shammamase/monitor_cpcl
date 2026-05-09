@@ -101,7 +101,7 @@ if ($rows) {
 <div class="container py-4">
     <div class="card">
         <div class="card-body">
-            <h4 class="mb-3">Hasil Import Volume dan Unit</h4>
+            <h4 class="mb-3">Hasil Import Volume dan Satuan</h4>
 
             <?php foreach ($messages as $message): ?>
                 <div class="alert alert-<?= e($message['type']) ?>"><?= e($message['text']) ?></div>
