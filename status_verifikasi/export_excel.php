@@ -16,6 +16,7 @@ $eselon_1       = trim($_GET['eselon_1'] ?? '');
 $id_sumber      = trim($_GET['id_sumber'] ?? '');
 $status_filter  = trim($_GET['status_filter'] ?? '');
 $id_jenis       = trim($_GET['id_jenis_bantuan'] ?? '');
+$satuan         = trim($_GET['satuan'] ?? '');
 $tanggal_dari   = trim($_GET['tanggal_dari'] ?? '');
 $tanggal_sampai = trim($_GET['tanggal_sampai'] ?? '');
 $eselonList = [
@@ -78,6 +79,11 @@ if ($id_jenis !== '') {
           AND svjb2.id_jenis_bantuan = :id_jenis_bantuan
     )";
     $params['id_jenis_bantuan'] = $id_jenis;
+}
+
+if ($satuan !== '') {
+    $where[] = "sv.satuan = :satuan";
+    $params['satuan'] = $satuan;
 }
 
 if ($tanggal_dari !== '') {

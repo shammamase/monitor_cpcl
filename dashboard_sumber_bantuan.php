@@ -183,6 +183,7 @@ unset($row);
             <a href="<?= base_url('index.php') ?>" class="btn btn-outline-secondary">Data Status Verifikasi</a>
             <a href="<?= base_url('dashboard_sumber_bantuan_eselon.php') ?>" class="btn btn-outline-success">Rekap Sumber Bantuan Es.1</a>
             <a href="<?= base_url('dashboard_jenis_bantuan.php') ?>" class="btn btn-outline-success">Rekap Jenis Bantuan</a>
+            <a href="<?= base_url('dashboard_volume_sumber_bantuan.php') ?>" class="btn btn-outline-success">Volume per Sumber</a>
             <a href="<?= base_url('dashboard_perwilayah.php') ?>" class="btn btn-outline-success">Rangking Per Wilayah</a>
         </div>
     </div>
