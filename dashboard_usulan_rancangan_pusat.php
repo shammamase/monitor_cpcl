@@ -77,6 +77,12 @@ function format_volume($value)
 {
     return rtrim(rtrim(number_format((float)$value, 2, ',', '.'), '0'), ',');
 }
+
+function nama_sumber_eselon_2($namaSumber)
+{
+    $parts = explode(' - ', (string)$namaSumber);
+    return trim($parts[0] ?? $namaSumber);
+}
 ?>
 <!doctype html>
 <html lang="id">
@@ -224,7 +230,7 @@ function format_volume($value)
                                                 'satuan' => $row['satuan'],
                                                 'status_filter' => '1',
                                             ])) ?>" class="sumber-name text-decoration-none">
-                                                <?= e($row['nama_sumber']) ?>
+                                                <?= e(nama_sumber_eselon_2($row['nama_sumber'])) ?>
                                             </a>
                                         </td>
                                         <td class="text-end"><?= e(format_volume($row['total_volume'])) ?></td>

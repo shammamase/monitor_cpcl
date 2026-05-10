@@ -78,6 +78,12 @@ foreach ($rows as $row) {
     ];
 }
 
+function nama_sumber_eselon_2($namaSumber)
+{
+    $parts = explode(' - ', (string)$namaSumber);
+    return trim($parts[0] ?? $namaSumber);
+}
+
 $spreadsheet = new Spreadsheet();
 $sheet = $spreadsheet->getActiveSheet();
 $sheet->setTitle('Usulan Rancangan');
@@ -135,7 +141,7 @@ foreach ($rekap as $group) {
     $rowNumber++;
 
     foreach ($detailRows as $row) {
-        $sheet->setCellValue('B' . $rowNumber, $row['nama_sumber']);
+        $sheet->setCellValue('B' . $rowNumber, nama_sumber_eselon_2($row['nama_sumber']));
         $sheet->setCellValue('C' . $rowNumber, (float)$row['total_volume']);
         $sheet->setCellValue('D' . $rowNumber, $row['satuan']);
         $rowNumber++;
