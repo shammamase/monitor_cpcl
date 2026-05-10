@@ -356,6 +356,9 @@ function buildPageUrl($page, $keyword, $provinsi_id, $kabupaten_id, $eselon_1, $
             <a class="nav-link active" href="<?= base_url('dashboard_volume_sumber_bantuan.php') ?>">Volume per Sumber</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link active" href="<?= base_url('dashboard_volume_sumber_bantuan_eselon.php') ?>">Volume per Sumber Es.1</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link active" href="<?= base_url('dashboard_volume_jenis_bantuan.php') ?>">Volume per Jenis</a>
         </li>
     </ul>
