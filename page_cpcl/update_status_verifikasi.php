@@ -15,7 +15,7 @@ $volume              = str_replace(',', '.', str_replace('.', '', $volume));
 $satuan              = trim($_POST['satuan'] ?? '');
 $keterangan_kendala  = trim($_POST['keterangan_kendala'] ?? '');
 $keterangan_umum     = '';
-$satuanOptions       = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
+$satuanOptions       = cpcl_all_satuan_options();
 
 if ($provinsi_id_user <= 0) {
     die('Provinsi user tidak valid.');
@@ -146,6 +146,10 @@ $jumlahJenisSesuai = (int)$stmtValidasiJenis->fetch()['total'];
 
 if ($jumlahJenisSesuai !== count($idJenisValid)) {
     die('Ada jenis bantuan yang tidak sesuai dengan sumber bantuan yang dipilih.');
+}
+
+if (!cpcl_is_satuan_allowed_for_jenis_bantuan($pdo, $idJenisValid, $satuan, $satuanOptions)) {
+    die('Satuan tidak sesuai dengan jenis bantuan yang dipilih.');
 }
 
 try {

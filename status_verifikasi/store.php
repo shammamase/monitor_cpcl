@@ -14,7 +14,7 @@ $volume             = str_replace(',', '.', str_replace('.', '', $volume));
 $satuan             = trim($_POST['satuan'] ?? '');
 $keterangan_kendala = trim($_POST['keterangan_kendala'] ?? '');
 $keterangan_umum    = trim($_POST['keterangan_umum'] ?? '');
-$satuanOptions      = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
+$satuanOptions      = cpcl_all_satuan_options();
 
 /*
 |--------------------------------------------------------------------------
@@ -67,6 +67,25 @@ if ((int)$exists['total'] > 0) {
 }
 
 try {
+    $idJenisValid = [];
+
+    foreach ($id_jenis_bantuan as $idjb) {
+        $idjb = (int)$idjb;
+        if ($idjb > 0) {
+            $idJenisValid[] = $idjb;
+        }
+    }
+
+    $idJenisValid = array_values(array_unique($idJenisValid));
+
+    if (count($idJenisValid) === 0) {
+        die('Jenis bantuan tidak valid.');
+    }
+
+    if (!cpcl_is_satuan_allowed_for_jenis_bantuan($pdo, $idJenisValid, $satuan, $satuanOptions)) {
+        die('Satuan tidak sesuai dengan jenis bantuan yang dipilih.');
+    }
+
     $pdo->beginTransaction();
 
     /*
@@ -148,12 +167,7 @@ try {
         )
     ");
 
-    foreach ($id_jenis_bantuan as $idjb) {
-        $idjb = (int)$idjb;
-        if ($idjb <= 0) {
-            continue;
-        }
-
+    foreach ($idJenisValid as $idjb) {
         $stmtRelasi->execute([
             'id_status_verif'   => $id_status_verif,
             'id_jenis_bantuan'  => $idjb,

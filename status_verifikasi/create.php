@@ -4,7 +4,7 @@ require_once __DIR__ . '/../helpers/functions.php';
 
 $provinsi = $pdo->query("SELECT id, name FROM provinsis ORDER BY name ASC")->fetchAll();
 $sumber   = $pdo->query("SELECT id_sumber, nama_sumber FROM sumber_bantuan ORDER BY id_sumber ASC")->fetchAll();
-$satuanOptions = ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
+$satuanOptions = cpcl_all_satuan_options();
 ?>
 <!doctype html>
 <html lang="id">
@@ -231,6 +231,7 @@ $(document).ready(function() {
     $('#id_sumber').on('change', function() {
         let idSumber = $(this).val();
 
+        $('#satuan').val('').trigger('change.select2');
         $('#id_jenis_bantuan').html('').trigger('change');
 
         if (idSumber) {
@@ -240,15 +241,46 @@ $(document).ready(function() {
                 data: { id_sumber: idSumber },
                 success: function(response) {
                     $('#id_jenis_bantuan').html(response).trigger('change');
+                    refreshSatuanOptions();
                 }
             });
+        } else {
+            refreshSatuanOptions();
         }
+    });
+
+    function refreshSatuanOptions() {
+        let selectedSatuan = $('#satuan').val();
+        let selectedJenis = $('#id_jenis_bantuan').val() || [];
+
+        $.ajax({
+            url: '<?= base_url("ajax/get_satuan_by_jenis_bantuan.php") ?>',
+            type: 'GET',
+            data: { id_jenis_bantuan: selectedJenis },
+            traditional: true,
+            success: function(response) {
+                $('#satuan').html(response);
+
+                if (selectedSatuan && $('#satuan option[value="' + selectedSatuan.replace(/"/g, '\\"') + '"]').length > 0) {
+                    $('#satuan').val(selectedSatuan);
+                } else {
+                    $('#satuan').val('');
+                }
+
+                $('#satuan').trigger('change.select2');
+            }
+        });
+    }
+
+    $('#id_jenis_bantuan').on('change', function() {
+        refreshSatuanOptions();
     });
 
     toggleStatusVerifikasiFields();
     $('#status_verifikasi').on('change', function() {
         toggleStatusVerifikasiFields();
     });
+    refreshSatuanOptions();
 });
 </script>
 </body>
