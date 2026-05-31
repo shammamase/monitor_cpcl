@@ -13,7 +13,7 @@ function e($string)
 
 function cpcl_all_satuan_options(): array
 {
-    return ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat'];
+    return ['Kg', 'Ton', 'Unit', 'Ha', 'Liter', 'Paket', 'Batang', 'Ekor', 'Meter', 'M2', 'Kelompok Masyarakat', 'Sertifikat', 'Layanan'];
 }
 
 function cpcl_jenis_bantuan_satuan_table_exists(PDO $pdo): bool
